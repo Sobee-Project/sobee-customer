@@ -34,10 +34,6 @@ const RegisterPage = () => {
 
   const { execute, status } = useAction(registerUser, {
     onSuccess: ({ data }) => {
-      if (!data) {
-        toast.error("Register failed!")
-        return
-      }
       if (data.success) {
         toast.success("Register successfully!")
       } else {

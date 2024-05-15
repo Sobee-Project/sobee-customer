@@ -29,10 +29,6 @@ const LoginPage = () => {
 
   const { execute, status } = useAction(login, {
     onSuccess: ({ data }) => {
-      if (!data) {
-        toast.error("Login failed!")
-        return
-      }
       if (data.success) {
         toast.success(data.message)
       } else {

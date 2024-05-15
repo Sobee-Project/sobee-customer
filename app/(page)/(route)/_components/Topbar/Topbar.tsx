@@ -1,18 +1,17 @@
 "use client"
-import { getCurrentUser, logout } from "@/_actions"
+import { logout } from "@/_actions"
 import { APP_ROUTES } from "@/_constants"
 import { IUser } from "@/_lib/interfaces"
 import { cn } from "@/_lib/utils"
 import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react"
-import { motion } from "framer-motion"
-import { ChevronDown, LogOut, Menu, UserRound } from "lucide-react"
+import { LogOut, Menu, UserRound } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
 import Image from "next/image"
 import Link from "next/link"
-import { useParams, usePathname } from "next/navigation"
-import React, { useCallback, useEffect, useMemo } from "react"
+import { usePathname } from "next/navigation"
+import { useCallback, useEffect } from "react"
 import toast from "react-hot-toast"
-import { otherRouteMock, routeMobileMock, routeMock, userRouteMock } from "../../_mock"
+import { routeMobileMock, routeMock, userRouteMock } from "../../_mock"
 
 type Props = {
   user?: IUser
@@ -21,6 +20,9 @@ type Props = {
 const Topbar = ({ user }: Props) => {
   const { execute } = useAction(logout, {
     onSuccess: ({ data }) => {
+      if (!data) {
+        return
+      }
       if (data.success) {
         toast.success(data.message)
       } else {

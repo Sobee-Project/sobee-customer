@@ -4,7 +4,8 @@ import "./globals.css"
 import Providers from "./providers"
 
 const inter = Teachers({
-  subsets: ["latin"]
+  subsets: ["latin"],
+  fallback: ["sans-serif", "system-ui", "ui-sans-serif"]
 })
 
 export const metadata: Metadata = {
