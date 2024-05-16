@@ -1,5 +1,6 @@
 "use client"
 import { logout } from "@/_actions"
+import { Logo, ThemeSwitcher } from "@/_components"
 import { APP_ROUTES } from "@/_constants"
 import { IUser } from "@/_lib/interfaces"
 import { cn } from "@/_lib/utils"
@@ -54,10 +55,8 @@ const Topbar = ({ user }: Props) => {
   )
 
   return (
-    <div className='sticky top-0 z-50 flex items-center justify-between self-start bg-white p-4 shadow-sm md:px-8'>
-      <Link href={APP_ROUTES.HOME}>
-        <Image src={"/logo_text_light.png"} alt={"Logo"} width={120} height={50} className='object-contain' priority />
-      </Link>
+    <div className='sticky top-0 z-50 flex items-center justify-between self-start bg-background p-4 shadow-sm md:px-8'>
+      <Logo />
       <div className='flex gap-4'>
         <div className='hidden gap-4 md:flex'>
           {routeMock.map(({ href, title }) => (
@@ -86,6 +85,7 @@ const Topbar = ({ user }: Props) => {
             </DropdownMenu>
           </Dropdown>
         </div>
+        <ThemeSwitcher />
         {user ? (
           <Dropdown radius='sm'>
             <DropdownTrigger>

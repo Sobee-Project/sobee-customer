@@ -1,4 +1,4 @@
-export { changePassword, getCurrentUser, login, logout, register } from "./auth-action"
+export { changePassword, forgotPassword, getCurrentUser, login, logout, register } from "./auth-action"
 export { fetchAllBrands, fetchBrandById } from "./brand-action"
 export { fetchAllCategories, fetchCategoryById } from "./category-action"
 export { uploadFile, uploadUrl } from "./cloudinary-action"

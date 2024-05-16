@@ -1,7 +1,6 @@
 "use client"
 import { IFaq } from "@/_lib/interfaces"
 import { Accordion, AccordionItem } from "@nextui-org/react"
-import { Minus, Plus, X } from "lucide-react"
 import React from "react"
 
 type Props = {
@@ -17,7 +16,7 @@ const FAQList = ({ faqs }: Props) => {
         <AccordionItem
           key={faq._id}
           title={<span className='line-clamp-1 text-sm font-medium sm:text-base'>{faq.title}</span>}
-          className='text-gray-600'
+          className='text-gray-600 dark:text-slate-300'
         >
           {faq.description}
         </AccordionItem>

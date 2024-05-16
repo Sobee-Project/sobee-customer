@@ -37,7 +37,15 @@ export const registerFormSchema = z
     path: ["confirmPassword"]
   })
 
+export const forgotPasswordFormSchema = z.object({
+  emailOrPhone: z
+    .string()
+    .min(10, "Email or phone number must be at least 10 characters long")
+    .max(255, "Email or phone number must be at most 255 characters long")
+})
+
 export type LoginFormSchema = z.infer<typeof loginFormSchema>
 export type LogoutFormSchema = z.infer<typeof logoutFormSchema>
 export type ChangePasswordFormSchema = z.infer<typeof changePasswordFormSchema>
 export type RegisterFormSchema = z.infer<typeof registerFormSchema>
+export type ForgotPasswordFormSchema = z.infer<typeof forgotPasswordFormSchema>

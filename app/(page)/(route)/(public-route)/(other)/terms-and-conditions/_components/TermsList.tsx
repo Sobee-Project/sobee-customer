@@ -32,7 +32,7 @@ const FAQList = ({ terms }: Props) => {
           </Link>
         ))}
       </aside>
-      <div className='space-y-4 rounded-md bg-white p-4 shadow'>
+      <div className='space-y-4'>
         {terms.map((term, index) => (
           <div key={term._id}>
             <h2
@@ -41,7 +41,7 @@ const FAQList = ({ terms }: Props) => {
             >
               {term.title}
             </h2>
-            <p className='text-gray-600'>{term.description}</p>
+            <p className='text-gray-600 dark:text-slate-300'>{term.description}</p>
           </div>
         ))}
       </div>

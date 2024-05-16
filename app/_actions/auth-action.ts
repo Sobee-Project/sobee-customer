@@ -5,6 +5,7 @@ import {
   LoginFormSchema,
   RegisterFormSchema,
   changePasswordFormSchema,
+  forgotPasswordFormSchema,
   loginFormSchema,
   registerFormSchema
 } from "@/_lib/form-schema"
@@ -87,5 +88,13 @@ export const register = safeAction
       setCredentialsToCookie({ accessToken, refreshToken, user_id: user._id! }, cookies)
       redirect(APP_ROUTES.HOME)
     }
+    return res
+  })
+
+export const forgotPassword = safeAction
+  .metadata({ actionName: "Forgot password" })
+  .schema(forgotPasswordFormSchema)
+  .action(async ({ parsedInput }) => {
+    const res = await FETCH.post(API_ROUTES.AUTH.FORGOT_PASSWORD, parsedInput)
     return res
   })

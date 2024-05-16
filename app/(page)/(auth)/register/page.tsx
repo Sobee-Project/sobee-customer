@@ -1,7 +1,7 @@
 "use client"
 
 import { register as registerUser } from "@/_actions"
-import { PasswordInput } from "@/_components"
+import { Logo, PasswordInput } from "@/_components"
 import { APP_ROUTES } from "@/_constants"
 import { EGender, ERole } from "@/_lib/enums"
 import { RegisterFormSchema, registerFormSchema } from "@/_lib/form-schema"
@@ -50,12 +50,12 @@ const RegisterPage = () => {
 
   return (
     <>
-      <div className='flex min-h-screen w-full flex-col items-center justify-center bg-white px-5 py-6 sm:p-8'>
+      <div className='flex min-h-screen w-full flex-col items-center justify-center bg-background px-5 py-6 sm:p-8'>
         <form onSubmit={handleSubmit(handleClickLogin)} className='flex w-full flex-col md:max-w-[420px]'>
           <div className='self-center'>
-            <Image src={"/logo_text_light.png"} alt='logo' width={140} height={50} className='object-contain' />
+            <Logo />
           </div>
-          <p className='mb-8 mt-4 max-w-60 self-center text-center text-sm text-gray-600 sm:mb-10 sm:mt-5'>
+          <p className='mb-8 mt-4 max-w-60 self-center text-center text-sm text-gray-600 dark:text-slate-300 sm:mb-10 sm:mt-5'>
             Register to your account to explore all the features of the app.
           </p>
           <div className='w-full space-y-8'>
@@ -162,7 +162,7 @@ const RegisterPage = () => {
           </div>
         </form>
       </div>
-      <div className='flex items-center justify-center'>
+      <div className='hidden items-center justify-center bg-gradient-to-bl from-slate-50 to-slate-300 p-4 dark:from-slate-600 dark:to-black md:flex'>
         <Image
           src={"/login_bg.png"}
           alt='login-bg'

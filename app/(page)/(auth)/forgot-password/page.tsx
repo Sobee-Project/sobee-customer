@@ -1,57 +1,50 @@
 "use client"
-
-import { login } from "@/_actions"
-import { Logo, PasswordInput } from "@/_components"
+import { forgotPassword } from "@/_actions"
+import { Logo } from "@/_components"
 import { APP_ROUTES } from "@/_constants"
-import { LoginFormSchema, loginFormSchema } from "@/_lib/form-schema"
+import { ForgotPasswordFormSchema, forgotPasswordFormSchema } from "@/_lib/form-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Divider, Input } from "@nextui-org/react"
-
-import { motion } from "framer-motion"
-import { ChevronLeft } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import React from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 
-const LoginPage = () => {
-  const router = useRouter()
+const Page = () => {
   const {
     register,
-    watch,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<LoginFormSchema>({
-    resolver: zodResolver(loginFormSchema)
+    formState: { errors },
+    handleSubmit
+  } = useForm<ForgotPasswordFormSchema>({
+    resolver: zodResolver(forgotPasswordFormSchema)
   })
 
-  const { execute, status } = useAction(login, {
+  const { execute, status } = useAction(forgotPassword, {
     onSuccess: ({ data }) => {
       if (data.success) {
         toast.success(data.message)
       } else {
-        toast.error(data.message || "Login failed!")
+        toast.error(data.message)
       }
     }
   })
-
   const isLoading = status === "executing"
 
-  const handleClickLogin = (data: LoginFormSchema) => {
+  const onSubmit = (data: ForgotPasswordFormSchema) => {
     execute(data)
   }
 
   return (
     <>
       <div className='flex min-h-screen w-full flex-col items-center justify-center bg-background px-5 py-6 sm:p-8'>
-        <form onSubmit={handleSubmit(handleClickLogin)} className='flex w-full flex-col md:max-w-[420px]'>
+        <form onSubmit={handleSubmit(onSubmit)} className='flex w-full flex-col md:max-w-[420px]'>
           <div className='self-center'>
             <Logo />
           </div>
           <p className='mb-8 mt-4 max-w-56 self-center text-center text-sm text-gray-600 dark:text-slate-300 sm:mb-10 sm:mt-5'>
-            Login to your account to access all the features of the app.
+            We will send you a new password to your email.
           </p>
           <div className='w-full space-y-8'>
             <Input
@@ -67,24 +60,7 @@ const LoginPage = () => {
               errorMessage={errors.emailOrPhone?.message}
               isInvalid={!!errors.emailOrPhone}
             />
-            <PasswordInput
-              {...register("password")}
-              label='Password'
-              labelPlacement='outside'
-              placeholder='Enter your secret password'
-              variant='bordered'
-              radius='sm'
-              fullWidth
-              errorMessage={errors.password?.message}
-              isInvalid={!!errors.password}
-              description={
-                <div className='mt-2 flex justify-end'>
-                  <Link href={APP_ROUTES.FORGOT_PASSWORD} className='text-sm text-primary underline'>
-                    Forgot password?
-                  </Link>
-                </div>
-              }
-            />
+
             <Button
               type='submit'
               fullWidth
@@ -93,13 +69,13 @@ const LoginPage = () => {
               isDisabled={isLoading}
               isLoading={isLoading}
             >
-              {isLoading ? "Logging in" : "Login"}
+              {isLoading ? "Sending..." : "Send"}
             </Button>
             <Divider />
             <p className='text-center text-sm'>
-              Don&apos;t have any account?{" "}
-              <Link className='text-primary underline transition-opacity hover:opacity-50' href={APP_ROUTES.REGISTER}>
-                Register
+              Already have an account?{" "}
+              <Link className='text-primary underline transition-opacity hover:opacity-50' href={APP_ROUTES.LOGIN}>
+                Login here
               </Link>
             </p>
           </div>
@@ -107,8 +83,8 @@ const LoginPage = () => {
       </div>
       <div className='hidden items-center justify-center bg-gradient-to-bl from-slate-50 to-slate-300 p-4 dark:from-slate-600 dark:to-black md:flex'>
         <Image
-          src={"/register_bg.png"}
-          alt='register-bg'
+          src={"/forgot_password.svg"}
+          alt='forgot-password-bg'
           className='hidden object-cover md:block'
           priority={true}
           width={400}
@@ -118,4 +94,5 @@ const LoginPage = () => {
     </>
   )
 }
-export default LoginPage
+
+export default Page

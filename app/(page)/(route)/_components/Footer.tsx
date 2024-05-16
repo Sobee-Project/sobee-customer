@@ -1,4 +1,5 @@
 "use client"
+import { Logo } from "@/_components"
 import { API_ROUTES, APP_ROUTES } from "@/_constants"
 import { Button, Input, Link } from "@nextui-org/react"
 import { motion } from "framer-motion"
@@ -6,20 +7,18 @@ import { Facebook, Instagram, Linkedin, SendHorizonal, Twitter, Youtube } from "
 import Image from "next/image"
 import NextLink from "next/link"
 import React, { useState } from "react"
-import { accountRouteMock, otherRouteMock, routeMock } from "../_mock"
+import { accountRouteMock, otherRouteMock, routeMock, userRouteMock } from "../_mock"
 
 const Footer = () => {
   const [email, setEmail] = useState("")
   return (
-    <div className='flex w-full flex-col border-t border-gray-100 bg-white px-5 md:px-10 lg:border-b-8 lg:px-[50px] xl:px-16'>
+    <div className='flex w-full flex-col border-t border-t-gray-100 bg-background px-5 dark:border-t-gray-500 md:px-10 lg:px-[50px] xl:px-16'>
       <div className='grid w-full grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 pt-16 md:grid-cols-3 lg:pb-16 lg:pt-24 xl:grid-cols-[repeat(auto-fill,minmax(220px,1fr))] xl:gap-8 2xl:grid-cols-5'>
         <div className='flex flex-col gap-2'>
-          <div className='h-16'>
-            <NextLink href={APP_ROUTES.HOME}>
-              <Image src='/logo_text_light.png' alt='Sobee' width={120} height={40} />
-            </NextLink>
+          <div className='h-8 md:h-16'>
+            <Logo />
           </div>
-          <p className='text-gray-600'>
+          <p className='text-gray-600 dark:text-slate-300'>
             Sobee is a platform helps you to find and buy the best products from the best brands.
           </p>
           <p>
@@ -43,7 +42,7 @@ const Footer = () => {
           </div>
         </div>
         <div className='flex flex-col gap-2'>
-          <div className='h-16'>
+          <div className='h-8 md:h-16'>
             <h4 className='text-lg font-semibold'>Explore</h4>
           </div>
           {routeMock.map((route) => (
@@ -53,7 +52,7 @@ const Footer = () => {
           ))}
         </div>
         <div className='flex flex-col gap-2'>
-          <div className='h-16'>
+          <div className='h-8 md:h-16'>
             <h4 className='text-lg font-semibold'>Account</h4>
           </div>
           {accountRouteMock.map((route) => (
@@ -63,8 +62,18 @@ const Footer = () => {
           ))}
         </div>
         <div className='flex flex-col gap-2'>
-          <div className='h-16'>
-            <h4 className='text-lg font-semibold'>Customer Service & Policy</h4>
+          <div className='h-8 md:h-16'>
+            <h4 className='text-lg font-semibold'>Customer</h4>
+          </div>
+          {userRouteMock.map((route) => (
+            <Link key={route.href} href={route.href} color='foreground' underline='hover' as={NextLink}>
+              {route.title}
+            </Link>
+          ))}
+        </div>
+        <div className='flex flex-col gap-2'>
+          <div className='h-8 md:h-16'>
+            <h4 className='text-lg font-semibold'>Policy</h4>
           </div>
           {otherRouteMock.map((route) => (
             <Link key={route.href} href={route.href} color='foreground' underline='hover' as={NextLink}>
@@ -73,7 +82,7 @@ const Footer = () => {
           ))}
         </div>
         <div className='flex flex-col gap-2'>
-          <div className='h-16'>
+          <div className='h-8 md:h-16'>
             <h4 className='text-lg font-semibold'>Subcribe Now</h4>
           </div>
           <p className='text-gray-600'>Subscribe to our newsletter to get the latest news and updates.</p>
@@ -104,7 +113,7 @@ const Footer = () => {
           />
         </div>
       </div>
-      <div className='mt-8 flex w-full flex-col items-center gap-2 border-t border-gray-200 pb-20 pt-8 lg:mt-0 lg:flex-row lg:justify-between lg:border-t-0 lg:pb-12'>
+      <div className='mt-8 flex w-full flex-col items-center gap-2 border-t border-t-gray-200 pb-20 pt-8 dark:border-t-gray-500 lg:mt-0 lg:flex-row lg:justify-between lg:border-t-0 lg:pb-12'>
         <span className='order-2 shrink-0 text-sm lg:order-1'>
           ©2024 Sobee. Copyright © Sobee. All rights reserved worldwide. SOBEE
         </span>

@@ -32,10 +32,6 @@ export const accountRouteMock = [
   {
     title: "Forgot Password",
     href: APP_ROUTES.FORGOT_PASSWORD
-  },
-  {
-    title: "Change Password",
-    href: APP_ROUTES.CHANGE_PASSWORD
   }
 ]
 
