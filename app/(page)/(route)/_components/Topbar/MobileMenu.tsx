@@ -29,13 +29,12 @@ const MobileMenu = ({ onClose, visible, user }: Props) => {
 
   return (
     <div className={`fixed inset-0 z-[60]`}>
-      <div className='absolute inset-0 size-full bg-slate-700/50' onClick={onClose} />
+      <div className='absolute right-0 top-0 h-full w-4/5 bg-slate-700/50' onClick={onClose} />
       <motion.div
         className='flex h-full w-4/5 flex-col gap-4 bg-background p-4 shadow-lg'
         initial={{ x: "-100%" }}
         animate={{ x: visible ? 0 : "-100%" }}
         transition={{ duration: 0.3 }}
-        exit={{ x: "-100%" }}
       >
         <Logo />
         <Divider />
@@ -79,7 +78,6 @@ const MobileMenu = ({ onClose, visible, user }: Props) => {
         initial={{ x: "100%" }}
         animate={{ x: visible ? 0 : "100%" }}
         transition={{ duration: 0.3 }}
-        exit={{ x: "100%" }}
       >
         <Button isIconOnly radius='full' variant='solid' color='default' className='shadow-lg' onPress={onClose}>
           <X />

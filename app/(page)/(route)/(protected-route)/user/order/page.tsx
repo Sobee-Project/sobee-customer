@@ -1,7 +1,8 @@
-import React from "react"
+import { APP_ROUTES } from "@/_constants"
+import { redirect } from "next/navigation"
 
 const page = () => {
-  return <div>page</div>
+  redirect(APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "all"))
 }
 
 export default page

@@ -12,7 +12,7 @@ const layout = ({ children, params }: LayoutParamsProps) => {
         <nav className='flex w-full justify-end md:hidden'>
           <UserTabBarMobile />
         </nav>
-        <div className='flex max-h-[80vh] min-h-[50vh] flex-1 flex-col gap-4 overflow-auto rounded-md border bg-background p-4 dark:border-slate-800'>
+        <div className='flex min-h-[50vh] flex-1 flex-col gap-4 rounded-md border bg-background p-4 dark:border-slate-800'>
           {children}
         </div>
       </div>

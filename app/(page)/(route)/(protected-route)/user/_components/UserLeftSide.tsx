@@ -1,59 +1,57 @@
 "use client"
 import { cn } from "@/_lib/utils"
 import { isNavActive } from "@/_utils"
-import { Listbox, ListboxItem, ListboxSection } from "@nextui-org/react"
+import { Accordion, AccordionItem } from "@nextui-org/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import React, { useCallback } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { userRouteMock } from "../_mock"
 
 const UserLeftSide = () => {
   const pathname = usePathname()
+  const [selectedKey, setSelectedKey] = useState<string>(pathname)
+
+  const getParentKeyFromPathname = useCallback(() => {
+    const parentKey = userRouteMock.find(({ items }) => items?.some(({ href }) => href === pathname))
+    return parentKey?.href
+  }, [pathname])
+
+  useEffect(() => {
+    setSelectedKey(getParentKeyFromPathname() || pathname)
+  }, [getParentKeyFromPathname, pathname])
 
   return (
-    <Listbox variant='light' color='primary'>
-      {userRouteMock.map(({ items, section, href }) =>
-        items ? (
-          <ListboxSection
-            //@ts-ignore
-            title={
-              <span
-                className={cn(
-                  "text-sm font-semibold",
-                  isNavActive(href, pathname) ? "text-primary" : "text-foreground"
-                )}
-              >
-                {section}
-              </span>
-            }
-            key={section}
-          >
-            {items.map(({ href, title }) => (
-              <ListboxItem
-                key={href}
-                as={Link}
-                href={href}
-                className={cn(isNavActive(href, pathname) ? "text-primary" : "text-gray-400")}
-              >
-                {title}
-              </ListboxItem>
-            ))}
-          </ListboxSection>
-        ) : (
-          <ListboxItem
-            key={section}
-            as={Link}
-            href={href}
-            classNames={{
-              title: cn("font-semibold", isNavActive(href, pathname) ? "text-primary" : "text-sm"),
-              base: "p-0 pl-1"
-            }}
-          >
-            {section}
-          </ListboxItem>
-        )
-      )}
-    </Listbox>
+    <Accordion showDivider={false} isCompact selectedKeys={[selectedKey]}>
+      {userRouteMock.map(({ href, items, section, icon: Icon }) => (
+        <AccordionItem
+          key={href}
+          title={section}
+          onPress={() => setSelectedKey(href)}
+          classNames={{
+            title: cn("font-medium", isNavActive(href, pathname) ? "text-primary" : "text-foreground")
+          }}
+          startContent={
+            <Icon size={20} className={cn(isNavActive(href, pathname) ? "text-primary" : "text-foreground")} />
+          }
+        >
+          <div className='flex flex-col gap-2 pl-2'>
+            {items &&
+              items.map(({ href: childHref, title }) => (
+                <Link
+                  key={childHref}
+                  href={childHref}
+                  className={cn(
+                    "transition-colors hover:text-primary",
+                    isNavActive(childHref, pathname) ? "text-primary" : "text-foreground"
+                  )}
+                >
+                  {title}
+                </Link>
+              ))}
+          </div>
+        </AccordionItem>
+      ))}
+    </Accordion>
   )
 }
 

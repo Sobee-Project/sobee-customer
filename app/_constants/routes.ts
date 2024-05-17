@@ -51,7 +51,8 @@ export const APP_ROUTES = {
     ORDERS: {
       INDEX: "/user/order",
       ID: "/user/order/:id",
-      CONTACT: "/user/order/:id/contact"
+      CONTACT: "/user/order/:id/contact",
+      STATUS: "/user/order/:status"
     }
   },
   CONTACT: "/contact"

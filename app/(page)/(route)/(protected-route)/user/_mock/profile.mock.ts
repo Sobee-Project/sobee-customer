@@ -1,4 +1,5 @@
 import { APP_ROUTES } from "@/_constants"
+import { Bell, Settings, Shirt, UserRoundCog } from "lucide-react"
 
 export const myAccountMock = [
   {
@@ -65,21 +66,55 @@ export const userRouteMock = [
   {
     section: "My account",
     items: myAccountMock,
-    href: APP_ROUTES.USER.ACCOUNT.PROFILE
-  },
-  {
-    section: "Settings",
-    items: mySettingsMock,
-    href: APP_ROUTES.USER.SETTINGS.INDEX
+    href: APP_ROUTES.USER.ACCOUNT.PROFILE,
+    icon: UserRoundCog
   },
   {
     section: "My orders",
     href: APP_ROUTES.USER.ORDERS.INDEX,
-    items: undefined
+    icon: Shirt,
+    items: [
+      {
+        title: "All",
+        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "all")
+      },
+      {
+        title: "Pending",
+        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "pending")
+      },
+      {
+        title: "Processing",
+        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "processing")
+      },
+      {
+        title: "Delivered",
+        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "delivered")
+      },
+      {
+        title: "Cancelled",
+        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "cancelled")
+      },
+      {
+        title: "Returned",
+        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "returned")
+      },
+      {
+        title: "Refunded",
+        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "refunded")
+      }
+    ]
   },
+  {
+    section: "Settings",
+    items: mySettingsMock,
+    href: APP_ROUTES.USER.SETTINGS.INDEX,
+    icon: Settings
+  },
+
   {
     section: "Notifications",
     href: APP_ROUTES.USER.NOTIFICATIONS.INDEX,
+    icon: Bell,
     items: [
       {
         title: "Order updates",
