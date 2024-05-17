@@ -17,11 +17,7 @@ export const APP_ROUTES = {
     ID: "/brand/:id"
   },
   CARTS: "/cart",
-  ORDERS: {
-    INDEX: "/order",
-    ID: "/order/:id",
-    CONTACT: "/order/:id/contact"
-  },
+
   COUPONS: {
     INDEX: "/coupon"
   },
@@ -34,6 +30,29 @@ export const APP_ROUTES = {
   },
   FAQS: "/faq",
   TERMS_AND_CONDITIONS: "/terms-and-conditions",
-  PROFILE: "/profile",
+  USER: {
+    ACCOUNT: {
+      PROFILE: "/user/account/profile",
+      BANK_ACCOUNT: "/user/account/bank-account",
+      ADDRESS: "/user/account/address",
+      CHANGE_PASSWORD: "/user/account/change-password"
+    },
+    SETTINGS: {
+      INDEX: "/user/settings",
+      NOTIFICATION: "/user/settings/notification",
+      DANGER: "/user/settings/danger"
+    },
+    NOTIFICATIONS: {
+      INDEX: "/user/notification",
+      ORDER: "/user/notification/order",
+      PROMOTION: "/user/notification/promotion",
+      SYSTEM: "/user/notification/system"
+    },
+    ORDERS: {
+      INDEX: "/user/order",
+      ID: "/user/order/:id",
+      CONTACT: "/user/order/:id/contact"
+    }
+  },
   CONTACT: "/contact"
 }

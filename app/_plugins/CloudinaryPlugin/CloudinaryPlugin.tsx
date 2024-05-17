@@ -24,7 +24,9 @@ const CloudinaryPlugin = ({
   onUploadSuccess,
   onClose,
   visible,
-  assetType = "*"
+  assetType = "*",
+  folder = "default",
+  multiple = true
 }: CloudinaryPluginProps) => {
   const {
     isOpen,
@@ -81,11 +83,11 @@ const CloudinaryPlugin = ({
             formData.append("files", file)
           })
         }
-        assetType !== "*" && formData.append("resourceType", assetType)
+        formData.append("resourceType", folder)
         break
       case url !== "":
         formData.append("url", url)
-        formData.append("resourceType", "image")
+        formData.append("resourceType", folder)
         break
       default:
         return
@@ -114,7 +116,13 @@ const CloudinaryPlugin = ({
                       </div>
                     }
                   >
-                    <ViaDevice files={files} setFiles={setFiles} type={assetType} isLoading={isLoading} />
+                    <ViaDevice
+                      files={files}
+                      setFiles={setFiles}
+                      type={assetType}
+                      isLoading={isLoading}
+                      multiple={multiple}
+                    />
                   </Tab>
                   <Tab
                     className='py-0'

@@ -7,17 +7,13 @@ import { LoginFormSchema, loginFormSchema } from "@/_lib/form-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Divider, Input } from "@nextui-org/react"
 
-import { motion } from "framer-motion"
-import { ChevronLeft } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 
 const LoginPage = () => {
-  const router = useRouter()
   const {
     register,
     watch,
@@ -29,6 +25,9 @@ const LoginPage = () => {
 
   const { execute, status } = useAction(login, {
     onSuccess: ({ data }) => {
+      if (!data) {
+        return
+      }
       if (data.success) {
         toast.success(data.message)
       } else {
@@ -105,7 +104,7 @@ const LoginPage = () => {
           </div>
         </form>
       </div>
-      <div className='hidden items-center justify-center bg-gradient-to-bl from-slate-50 to-slate-300 p-4 dark:from-slate-600 dark:to-black md:flex'>
+      <div className='hidden items-center justify-center bg-gradient-to-bl from-slate-50 to-slate-300 p-4 dark:from-slate-900 dark:to-black md:flex'>
         <Image
           src={"/register_bg.png"}
           alt='register-bg'

@@ -13,9 +13,10 @@ type Props = {
   setFiles: (files: File[] | FileList | null) => void
   type?: AssetType
   isLoading?: boolean
+  multiple: boolean
 }
 
-const ViaDevice = ({ files, setFiles, type = "*", isLoading = false }: Props) => {
+const ViaDevice = ({ files, setFiles, type = "*", isLoading = false, multiple }: Props) => {
   const uploadRef = React.useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState(false)
 
@@ -45,6 +46,7 @@ const ViaDevice = ({ files, setFiles, type = "*", isLoading = false }: Props) =>
   }
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
     const files = e.target.files
     onFilesChange(files)
   }
@@ -155,19 +157,21 @@ const ViaDevice = ({ files, setFiles, type = "*", isLoading = false }: Props) =>
               </motion.div>
             )
           })}
-          <Button
-            variant='flat'
-            startContent={<PlusIcon size={16} />}
-            className='h-full min-h-14 self-start'
-            onClick={onBrowse}
-            isDisabled={isLoading}
-          >
-            Add more
-          </Button>
+          {multiple && (
+            <Button
+              variant='flat'
+              startContent={<PlusIcon size={16} />}
+              className='h-full min-h-14 self-start'
+              onClick={onBrowse}
+              isDisabled={isLoading}
+            >
+              Add more
+            </Button>
+          )}
         </div>
       )
     )
-  }, [files, isLoading, onRemove])
+  }, [files, isLoading, multiple, onRemove])
 
   const acceptType = useMemo(() => {
     switch (type) {
@@ -192,7 +196,18 @@ const ViaDevice = ({ files, setFiles, type = "*", isLoading = false }: Props) =>
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
-      <input type='file' className='hidden' ref={uploadRef} onChange={onFileChange} multiple accept={acceptType} />
+      <input
+        type='file'
+        className='hidden'
+        ref={uploadRef}
+        onChange={onFileChange}
+        multiple={multiple}
+        accept={acceptType}
+        onClick={(e) => {
+          const element = e.target as HTMLInputElement
+          element.value = ""
+        }}
+      />
       {(!files || (files && files.length === 0)) && (
         <AnimatePresence>
           <div

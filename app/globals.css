@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --gradient-custom: linear-gradient(to right, red, blue);
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

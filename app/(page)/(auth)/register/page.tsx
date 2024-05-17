@@ -162,7 +162,7 @@ const RegisterPage = () => {
           </div>
         </form>
       </div>
-      <div className='hidden items-center justify-center bg-gradient-to-bl from-slate-50 to-slate-300 p-4 dark:from-slate-600 dark:to-black md:flex'>
+      <div className='hidden items-center justify-center bg-gradient-to-bl from-slate-50 to-slate-300 p-4 dark:from-slate-900 dark:to-black md:flex'>
         <Image
           src={"/login_bg.png"}
           alt='login-bg'

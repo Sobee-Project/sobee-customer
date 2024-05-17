@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic" // use this line to resolve Action error:
 
 const layout = async ({ children }: PropsWithChildren) => {
   const res = await getCurrentUser()
-  const user = res.data?.data?.user!
+  const user = res.data?.user
   return (
     <div className='min-h-screen'>
       <Topbar user={user} />

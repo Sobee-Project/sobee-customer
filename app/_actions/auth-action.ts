@@ -1,5 +1,5 @@
 "use server"
-import { API_ROUTES, APP_ROUTES, CACHE_KEY } from "@/_constants"
+import { API_ROUTES, APP_ROUTES, CACHE_KEY, COOKIES_KEY } from "@/_constants"
 import {
   ChangePasswordFormSchema,
   LoginFormSchema,
@@ -12,12 +12,19 @@ import {
 import { IUser } from "@/_lib/interfaces"
 import { AuthResponse } from "@/_lib/types"
 import { FETCH } from "@/_services"
-import { clearCredentialsFromCookie, safeAction, setCredentialsToCookie } from "@/_utils"
+import { safeAction, setCredentialsToCookie } from "@/_utils"
 import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-export const getCurrentUser = safeAction.metadata({ actionName: "Get current user" }).action(async () => {
+const clearCookies = async () => {
+  const cookieData = cookies()
+  cookieData.delete(COOKIES_KEY.ACCESS_TOKEN_KEY)
+  cookieData.delete(COOKIES_KEY.REFRESH_TOKEN_KEY)
+  cookieData.delete(COOKIES_KEY.USER_ID_KEY)
+}
+
+export const getCurrentUser = async () => {
   const res = await FETCH.get<{
     user: IUser
   }>(API_ROUTES.AUTH.GET_ME, {
@@ -28,11 +35,11 @@ export const getCurrentUser = safeAction.metadata({ actionName: "Get current use
     }
   })
   if (!res.success) {
-    clearCredentialsFromCookie(cookies)
-    redirect(APP_ROUTES.LOGIN)
+    clearCookies()
+    revalidateTag(CACHE_KEY.AUTH.GET_ME)
   }
   return res
-})
+}
 
 export const login = safeAction
   .metadata({
@@ -58,7 +65,7 @@ export const logout = safeAction
       cookies
     })
     if (res.success) {
-      clearCredentialsFromCookie(cookies)
+      clearCookies()
       revalidateTag(CACHE_KEY.AUTH.GET_ME)
       redirect(APP_ROUTES.LOGIN)
     }

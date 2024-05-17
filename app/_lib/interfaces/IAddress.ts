@@ -1,12 +1,13 @@
 import { IUser } from "./IUser"
 
 export interface IAddress {
+  _id?: string
+  name: string
+  phoneNumber: string
   country: string
-  postalCode: string
   city: string
   district: string
   ward: string
-  street: string
   specificAddress: string
   isDefault: boolean
   customer?: string | IUser

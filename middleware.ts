@@ -13,11 +13,21 @@ export async function middleware(request: NextRequest) {
   const refreshToken = cookies.get(COOKIES_KEY.REFRESH_TOKEN_KEY)
   const userId = cookies.get(COOKIES_KEY.USER_ID_KEY)
 
-  const redirectToLogin = () => {
-    const response = NextResponse.redirect(new URL(APP_ROUTES.LOGIN, request.url))
+  const deleteCookies = (response: NextResponse) => {
     response.cookies.delete(COOKIES_KEY.ACCESS_TOKEN_KEY)
     response.cookies.delete(COOKIES_KEY.REFRESH_TOKEN_KEY)
     response.cookies.delete(COOKIES_KEY.USER_ID_KEY)
+  }
+
+  const redirectToLogin = () => {
+    const response = NextResponse.redirect(new URL(APP_ROUTES.LOGIN, request.url))
+    deleteCookies(response)
+    return response
+  }
+
+  if (request.nextUrl.pathname === "/401") {
+    const response = NextResponse.next()
+    deleteCookies(response)
     return response
   }
 
@@ -51,7 +61,6 @@ export async function middleware(request: NextRequest) {
         }
       )
         .then((res) => {
-          console.log(res)
           if (!res.success) {
             return redirectToLogin()
           }

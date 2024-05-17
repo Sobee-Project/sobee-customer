@@ -19,5 +19,14 @@ export const CACHE_KEY = {
   },
   TERM: {
     GET_ALL: "TERM_GET_ALL"
+  },
+  CARD: {
+    GET_ALL: "CARD_GET_ALL"
+  },
+  PAYMENT_ACCOUNT: {
+    GET_ALL: "PAYMENT_ACCOUNT_GET_ALL"
+  },
+  ADDRESS: {
+    GET_ADDRESSES: "ADDRESS_GET_ADDRESSES"
   }
 }

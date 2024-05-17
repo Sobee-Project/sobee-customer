@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic"
 
 const layout = async ({ children }: LayoutParamsProps) => {
   const res = await getCurrentUser()
-  if (!res.data?.success) {
-    redirect("/" + (res.data?.statusCode || 401))
+  if (!res.success) {
+    redirect("/" + (res.statusCode || 401))
   }
   return <div>{children}</div>
 }

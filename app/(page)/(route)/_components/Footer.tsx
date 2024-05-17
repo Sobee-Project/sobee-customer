@@ -12,7 +12,7 @@ import { accountRouteMock, otherRouteMock, routeMock, userRouteMock } from "../_
 const Footer = () => {
   const [email, setEmail] = useState("")
   return (
-    <div className='flex w-full flex-col border-t border-t-gray-100 bg-background px-5 dark:border-t-gray-500 md:px-10 lg:px-[50px] xl:px-16'>
+    <div className='flex w-full flex-col border-t border-t-gray-100 px-5 dark:border-t-gray-800 dark:bg-gradient-to-br dark:from-slate-900 dark:to-black md:px-10 lg:px-[50px] xl:px-16'>
       <div className='grid w-full grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 pt-16 md:grid-cols-3 lg:pb-16 lg:pt-24 xl:grid-cols-[repeat(auto-fill,minmax(220px,1fr))] xl:gap-8 2xl:grid-cols-5'>
         <div className='flex flex-col gap-2'>
           <div className='h-8 md:h-16'>
@@ -85,7 +85,9 @@ const Footer = () => {
           <div className='h-8 md:h-16'>
             <h4 className='text-lg font-semibold'>Subcribe Now</h4>
           </div>
-          <p className='text-gray-600'>Subscribe to our newsletter to get the latest news and updates.</p>
+          <p className='text-gray-600 dark:text-slate-300'>
+            Subscribe to our newsletter to get the latest news and updates.
+          </p>
           <Input
             placeholder='Enter your email here'
             type='email'
@@ -113,7 +115,7 @@ const Footer = () => {
           />
         </div>
       </div>
-      <div className='mt-8 flex w-full flex-col items-center gap-2 border-t border-t-gray-200 pb-20 pt-8 dark:border-t-gray-500 lg:mt-0 lg:flex-row lg:justify-between lg:border-t-0 lg:pb-12'>
+      <div className='mt-8 flex w-full flex-col items-center gap-2 border-t border-t-gray-200 pb-20 pt-8 dark:border-t-gray-800 lg:mt-0 lg:flex-row lg:justify-between lg:border-t-0 lg:pb-12'>
         <span className='order-2 shrink-0 text-sm lg:order-1'>
           ©2024 Sobee. Copyright © Sobee. All rights reserved worldwide. SOBEE
         </span>

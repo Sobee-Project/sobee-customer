@@ -52,7 +52,7 @@ export const routeMobileMock = routeMock.concat(otherRouteMock)
 export const userRouteMock = [
   {
     title: "Profile",
-    href: APP_ROUTES.PROFILE,
+    href: APP_ROUTES.USER.ACCOUNT.PROFILE,
     icon: UserRound
   },
   {
@@ -62,7 +62,7 @@ export const userRouteMock = [
   },
   {
     title: "My Orders",
-    href: APP_ROUTES.ORDERS.INDEX,
+    href: APP_ROUTES.USER.ORDERS.INDEX,
     icon: Shirt
   }
 ]

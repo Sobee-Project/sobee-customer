@@ -44,10 +44,11 @@ export const uploadUrl = safeAction
   })
   .schema(uploadUrlFormSchema)
   .action(async ({ parsedInput }) => {
-    const { url } = parsedInput
+    const { url, resourceType } = parsedInput
     const formData = new FormData()
     formData.append("url", url)
     formData.append("upload_preset", ENV_CONFIG.CLOUDINARY_UPLOAD_PRESET!)
+    formData.append("folder", resourceType as string)
     const res = await FETCH.post<
       any,
       {

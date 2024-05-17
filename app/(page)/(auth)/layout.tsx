@@ -6,7 +6,7 @@ import { PropsWithChildren } from "react"
 
 const layout = ({ children }: PropsWithChildren) => {
   return (
-    <div className='grid max-h-screen min-h-screen grid-cols-1 gap-4 md:grid-cols-[60%_auto]'>
+    <div className='grid max-h-screen min-h-screen grid-cols-1 md:grid-cols-[60%_auto]'>
       <Button
         className='absolute left-4 top-4'
         as={Link}

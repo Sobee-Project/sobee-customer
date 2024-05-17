@@ -4,7 +4,6 @@ import { API_ROUTES, CACHE_KEY } from "@/_constants"
 import { IBrand } from "@/_lib/interfaces/IBrand"
 import { FETCH } from "@/_services"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
 
 export const fetchAllBrands = async () => {
   const res = await FETCH.get<IBrand[]>(API_ROUTES.BRAND.GET_BRANDS, {

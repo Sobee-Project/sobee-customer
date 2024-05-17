@@ -10,5 +10,6 @@ export const uploadFileFormSchema = zfd.formData({
 })
 
 export const uploadUrlFormSchema = zfd.formData({
-  url: zfd.text(z.string().url())
+  url: zfd.text(z.string().url()),
+  resourceType: zfd.text(z.string().optional()).optional()
 })

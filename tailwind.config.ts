@@ -21,6 +21,19 @@ const config: Config = {
     }
   },
   darkMode: "class",
-  plugins: [nextui(), require("tailwindcss-inner-border")]
+  plugins: [
+    nextui({
+      themes: {
+        dark: {
+          colors: {
+            background: {
+              DEFAULT: "#020617"
+            }
+          }
+        }
+      }
+    }),
+    require("tailwindcss-inner-border")
+  ]
 }
 export default config
