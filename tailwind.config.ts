@@ -33,7 +33,8 @@ const config: Config = {
         }
       }
     }),
-    require("tailwindcss-inner-border")
+    require("tailwindcss-inner-border"),
+    require("tailwind-scrollbar")({ nocompatible: true })
   ]
 }
 export default config

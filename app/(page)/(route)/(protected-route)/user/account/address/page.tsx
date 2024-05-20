@@ -14,7 +14,7 @@ const page = async () => {
   const user = userRes.data!.user
 
   return (
-    <div className='flex gap-8'>
+    <div className='flex gap-8 px-10'>
       <Address user={user} addresses={addresses} />
     </div>
   )

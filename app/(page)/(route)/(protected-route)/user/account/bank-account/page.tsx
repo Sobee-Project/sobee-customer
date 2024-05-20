@@ -31,7 +31,7 @@ const page = async () => {
   }
 
   return (
-    <div className='flex flex-col gap-8'>
+    <div className='flex flex-col gap-8 px-10'>
       <PaymentCardList cards={cardData} />
       <BankAccount accounts={accountData} bankList={bankList} />
     </div>

@@ -71,7 +71,7 @@ export const userRouteMock = [
   },
   {
     section: "My orders",
-    href: APP_ROUTES.USER.ORDERS.INDEX,
+    href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "all"),
     icon: Shirt,
     items: [
       {
@@ -107,13 +107,13 @@ export const userRouteMock = [
   {
     section: "Settings",
     items: mySettingsMock,
-    href: APP_ROUTES.USER.SETTINGS.INDEX,
+    href: APP_ROUTES.USER.SETTINGS.NOTIFICATION,
     icon: Settings
   },
 
   {
     section: "Notifications",
-    href: APP_ROUTES.USER.NOTIFICATIONS.INDEX,
+    href: APP_ROUTES.USER.NOTIFICATIONS.ORDER,
     icon: Bell,
     items: [
       {
