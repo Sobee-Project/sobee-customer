@@ -40,7 +40,7 @@ const ChangeAvatar = ({ avatar }: Props) => {
             execute({ avatar: urls[0] })
           }}
           multiple={false}
-          folder='avatars'
+          folder='image/avatar'
         />
       )}
     </>

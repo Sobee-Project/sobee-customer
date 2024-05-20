@@ -1,5 +1,5 @@
 "use server"
-import { API_ROUTES, APP_ROUTES, CACHE_KEY, COOKIES_KEY } from "@/_constants"
+import { API_ROUTES, APP_ROUTES, CACHE_KEY, COOKIES_KEY, ENV_CONFIG } from "@/_constants"
 import {
   ChangePasswordFormSchema,
   LoginFormSchema,
@@ -16,13 +16,6 @@ import { safeAction } from "@/_utils"
 import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-
-const clearCookies = async () => {
-  const cookieData = cookies()
-  cookieData.delete(COOKIES_KEY.ACCESS_TOKEN_KEY)
-  cookieData.delete(COOKIES_KEY.REFRESH_TOKEN_KEY)
-  cookieData.delete(COOKIES_KEY.USER_ID_KEY)
-}
 
 const setCookies = async (data: { accessToken: string; refreshToken: string; user_id: string }) => {
   const cookieData = cookies()
@@ -41,10 +34,7 @@ export const getCurrentUser = async () => {
       tags: [CACHE_KEY.AUTH.GET_ME]
     }
   })
-  if (!res.success) {
-    clearCookies()
-    revalidateTag(CACHE_KEY.AUTH.GET_ME)
-  }
+
   return res
 }
 
@@ -72,8 +62,6 @@ export const logout = safeAction
       cookies
     })
     if (res.success) {
-      clearCookies()
-      revalidateTag(CACHE_KEY.AUTH.GET_ME)
       redirect(APP_ROUTES.LOGIN)
     }
     return res

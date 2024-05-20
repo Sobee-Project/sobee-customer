@@ -1,11 +1,13 @@
 "use client"
+import { invalidateCookies } from "@/_actions"
 import { Logo, ScreenLoader, ThemeSwitcher } from "@/_components"
 import { APP_ROUTES } from "@/_constants"
 import { IUser } from "@/_lib/interfaces"
 import { cn } from "@/_lib/utils"
 import { isNavActive } from "@/_utils"
 import { Button, Spinner } from "@nextui-org/react"
-import { Menu } from "lucide-react"
+import { Menu, ShoppingCart } from "lucide-react"
+import { useAction } from "next-safe-action/hooks"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -33,6 +35,13 @@ const Topbar = ({ user }: Props) => {
   }, [pathname])
 
   const [showMenu, setShowMenu] = useState(false)
+
+  const { execute } = useAction(invalidateCookies)
+
+  useEffect(() => {
+    if (user) return
+    execute()
+  }, [execute, user])
 
   return (
     <div className='sticky top-0 z-50 flex items-center justify-between self-start bg-background p-4 shadow-sm dark:bg-gradient-to-br dark:from-slate-900 dark:to-black md:px-8'>
@@ -66,6 +75,11 @@ const Topbar = ({ user }: Props) => {
         <Logo className='block md:hidden' />
         <div className='flex gap-4'>
           <ThemeSwitcher />
+          {user && (
+            <Button isIconOnly variant='light' radius='full' as={Link} href={APP_ROUTES.CARTS}>
+              <ShoppingCart size={24} />
+            </Button>
+          )}
           {user && <UserMenu user={user} />}
         </div>
         {!user && (

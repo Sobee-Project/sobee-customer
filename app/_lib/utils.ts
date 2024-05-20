@@ -19,3 +19,10 @@ export function fromFileSizeToReadable(size: number) {
 
   return `${size.toFixed(hasDot ? 2 : 0)} ${units[unitIndex]}`
 }
+
+export const formatCurrency = (value: number = 0) => {
+  return value.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD"
+  })
+}

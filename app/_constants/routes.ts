@@ -19,7 +19,8 @@ export const APP_ROUTES = {
   CARTS: "/cart",
 
   COUPONS: {
-    INDEX: "/coupon"
+    INDEX: "/coupon",
+    ID: "/coupon/:id"
   },
   FLASH_SALES: {
     INDEX: "/flash-sale",

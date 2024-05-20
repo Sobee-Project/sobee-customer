@@ -23,7 +23,7 @@ const ThemeSwitcher = () => {
 
   return (
     <Button isIconOnly onPress={switchTheme} variant='light'>
-      {isLight ? <Moon /> : <Sun />}
+      {isLight ? <Moon size={24} /> : <Sun size={24} />}
     </Button>
   )
 }

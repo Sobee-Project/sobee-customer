@@ -1,5 +1,5 @@
 import { APP_ROUTES } from "@/_constants"
-import { Shirt, ShoppingBag, UserRound } from "lucide-react"
+import { Settings, Shirt, ShoppingBag, UserRound } from "lucide-react"
 
 export const routeMock = [
   {
@@ -56,13 +56,13 @@ export const userRouteMock = [
     icon: UserRound
   },
   {
-    title: "My Carts",
-    href: APP_ROUTES.CARTS,
-    icon: ShoppingBag
-  },
-  {
     title: "My Orders",
     href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "all"),
     icon: Shirt
+  },
+  {
+    title: "Settings",
+    href: APP_ROUTES.USER.SETTINGS.NOTIFICATION,
+    icon: Settings
   }
 ]

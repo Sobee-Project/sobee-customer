@@ -15,7 +15,15 @@ export const API_ROUTES = {
   },
 
   PRODUCT: {
-    GET_PRODUCTS: "/product"
+    GET_PRODUCTS: "/product",
+    GET_PUBLISHED_PRODUCTS: "/product/published",
+    GET_DRAFT_PRODUCTS: "/product/draft",
+    GET_POPULAR_PRODUCTS: "/product/popular",
+    GET_BEST_SELLER_PRODUCTS: "/product/best-seller",
+    GET_RELATED_PRODUCTS: "/product/related/:categoryId",
+    GET_DISCOUNT_PRODUCTS: "/product/discount",
+    GET_FEATURED_PRODUCTS: "/product/featured",
+    GET_PRODUCT: "/product/:id"
   },
 
   REVIEW: {
@@ -61,5 +69,9 @@ export const API_ROUTES = {
     GET_ADDRESSES: "/address/customer",
     DELETE_ADDRESS: "/address/:id",
     SET_DEFAULT: "/address/set-default"
+  },
+  COUPONS: {
+    GET_COUPONS: "/coupon",
+    GET_TODAY_COUPONS: "/coupon/today"
   }
 }

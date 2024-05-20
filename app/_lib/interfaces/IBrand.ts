@@ -4,6 +4,7 @@ export interface IBrand {
   _id?: string
   name: string
   logo: string
+  slug: string
   isActive: boolean
   website: string
   products?: string[] | IProduct[]

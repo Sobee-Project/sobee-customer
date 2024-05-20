@@ -85,7 +85,8 @@ export async function middleware(request: NextRequest) {
       if (AUTH_ROUTES.includes(request.nextUrl.pathname)) {
         return NextResponse.redirect(new URL(APP_ROUTES.HOME, request.url))
       }
-      return NextResponse.next()
+      const response = NextResponse.next()
+      return response
     }
   }
 
