@@ -4,7 +4,7 @@ import { UserLeftSide, UserTabBarMobile } from "./_components"
 
 const layout = ({ children, params }: LayoutParamsProps) => {
   return (
-    <div className='mx-auto px-4 py-10 md:mx-[10%]'>
+    <div className='mx-auto px-4 py-10 md:mx-[4%]'>
       <div className='flex flex-col gap-8 md:flex-row'>
         <aside className='hidden w-48 flex-col gap-4 self-start md:flex'>
           <UserLeftSide />

@@ -1,0 +1,6 @@
+export { default as ProductAssets } from "./ProductAssets"
+export { default as ProductDetails } from "./ProductDetails"
+export { default as ProductQuestions } from "./ProductQuestions"
+export { default as ProductReviews } from "./ProductReviews"
+export { default as RecommendProducts } from "./RecommendProducts"
+export { default as RelatedProducts } from "./RelatedProducts"

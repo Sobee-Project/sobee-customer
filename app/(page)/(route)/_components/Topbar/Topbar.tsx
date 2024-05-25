@@ -30,9 +30,6 @@ type Props = {
 
 const Topbar = ({ user }: Props) => {
   const pathname = usePathname()
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [pathname])
 
   const [showMenu, setShowMenu] = useState(false)
 

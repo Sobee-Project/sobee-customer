@@ -7,10 +7,10 @@ import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-export const fetchProductReviews = async () => {
-  const res = await FETCH.get<IReview[]>(API_ROUTES.REVIEW.GET_PRODUCT_REVIEWS, {
+export const fetchProductReviews = async (productId: string) => {
+  const res = await FETCH.get<IReview[]>(API_ROUTES.REVIEW.GET_PRODUCT_REVIEWS.replace(":id", productId), {
     next: {
-      tags: [CACHE_KEY.REVIEW.GET_ALL]
+      tags: [[CACHE_KEY.REVIEW.GET_ALL, productId].join(",")]
     },
     cookies
   })

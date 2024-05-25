@@ -1,31 +1,22 @@
 "use server"
 import { API_ROUTES, CACHE_KEY } from "@/_constants"
+import { toggleFavoriteFormSchma } from "@/_lib/form-schema"
 import { IProduct } from "@/_lib/interfaces"
 import { FETCH } from "@/_services"
+import { safeAction } from "@/_utils"
+import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-export const fetchPublishedProducts = async () => {
+export const fetchPublishedProducts = async (query?: Record<string, any>) => {
   const res = await FETCH.get<IProduct[]>(API_ROUTES.PRODUCT.GET_PUBLISHED_PRODUCTS, {
     cache: "reload",
     next: {
       tags: [CACHE_KEY.PRODUCT.GET_PUBLISHED]
     },
-    cookies
+    cookies,
+    params: query
   })
-  if (!res.success) redirect("/" + res.statusCode)
-  return res
-}
-
-export const fetchDraftProducts = async () => {
-  const res = await FETCH.get<IProduct[]>(API_ROUTES.PRODUCT.GET_DRAFT_PRODUCTS, {
-    cache: "reload",
-    next: {
-      tags: [CACHE_KEY.PRODUCT.GET_DRAFT]
-    },
-    cookies
-  })
-  if (!res.success) redirect("/" + res.statusCode)
   return res
 }
 
@@ -37,7 +28,6 @@ export const fetchFeaturedProducts = async () => {
     },
     cookies
   })
-  if (!res.success) redirect("/" + res.statusCode)
   return res
 }
 
@@ -61,7 +51,6 @@ export const fetchDiscountProducts = async () => {
     },
     cookies
   })
-  if (!res.success) redirect("/" + res.statusCode)
   return res
 }
 
@@ -77,25 +66,76 @@ export const fetchPopularProducts = async () => {
   return res
 }
 
-export const fetchRelatedProducts = async () => {
-  const res = await FETCH.get<IProduct[]>(API_ROUTES.PRODUCT.GET_RELATED_PRODUCTS, {
+export const fetchRelatedProducts = async (productId: string) => {
+  const res = await FETCH.get<IProduct[]>(API_ROUTES.PRODUCT.GET_RELATED_PRODUCTS.replace(":id", productId), {
     cache: "reload",
     next: {
-      tags: [CACHE_KEY.PRODUCT.GET_RELATED]
+      tags: [[CACHE_KEY.PRODUCT.GET_RELATED, productId].join(",")]
     },
     cookies
   })
-  if (!res.success) redirect("/" + res.statusCode)
+  return res
+}
+
+export const fetchRecommendProducts = async (productId: string) => {
+  const res = await FETCH.get<IProduct[]>(API_ROUTES.PRODUCT.GET_RECOMMEND_PRODUCTS.replace(":id", productId), {
+    cache: "reload",
+    next: {
+      tags: [[CACHE_KEY.PRODUCT.GET_RECOMMEND, productId].join(",")]
+    },
+    cookies
+  })
   return res
 }
 
 export const fetchProductById = async (productId: string) => {
-  const res = await FETCH.get<IProduct>(API_ROUTES.PRODUCT.GET_PRODUCT, {
+  const res = await FETCH.get<IProduct>(API_ROUTES.PRODUCT.GET_PRODUCT.replace(":id", productId), {
+    cache: "reload",
     next: {
       tags: [[CACHE_KEY.PRODUCT.GET_BY_ID, productId].join(", ")]
     },
     cookies
   })
-  if (!res.success) redirect("/" + res.statusCode)
   return res
 }
+
+export const fetchAllColors = async () => {
+  const res = await FETCH.get<string[]>(API_ROUTES.PRODUCT.GET_COLORS, {
+    cache: "reload",
+    next: {
+      tags: [CACHE_KEY.PRODUCT.GET_COLORS]
+    },
+    cookies
+  })
+  return res
+}
+
+export const fetchFavoriteProducts = async () => {
+  const res = await FETCH.get<IProduct[]>(API_ROUTES.PRODUCT.GET_CUSTOMER_FAVORITE_PRODUCTS, {
+    cache: "reload",
+    next: {
+      tags: [CACHE_KEY.PRODUCT.GET_CUSTOMER_FAVORITE]
+    },
+    cookies
+  })
+  return res
+}
+
+export const toggleFavorite = safeAction
+  .metadata({
+    actionName: "Toggle Favorite"
+  })
+  .schema(toggleFavoriteFormSchma)
+  .action(async ({ parsedInput }) => {
+    const res = await FETCH.put<any, IProduct>(
+      API_ROUTES.PRODUCT.TOGGLE_FAVORITE_PRODUCT.replace(":id", parsedInput),
+      undefined,
+      {
+        cookies
+      }
+    )
+    if (res.success) {
+      revalidateTag(CACHE_KEY.PRODUCT.GET_CUSTOMER_FAVORITE)
+    }
+    return res
+  })

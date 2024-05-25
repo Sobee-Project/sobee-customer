@@ -19,9 +19,17 @@ import { redirect } from "next/navigation"
 
 const setCookies = async (data: { accessToken: string; refreshToken: string; user_id: string }) => {
   const cookieData = cookies()
-  cookieData.set(COOKIES_KEY.ACCESS_TOKEN_KEY, data.accessToken)
-  cookieData.set(COOKIES_KEY.REFRESH_TOKEN_KEY, data.refreshToken)
-  cookieData.set(COOKIES_KEY.USER_ID_KEY, data.user_id)
+
+  const options = {
+    maxAge: 30 * 24 * 60 * 60,
+    path: "/",
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production"
+  } as const
+
+  cookieData.set(COOKIES_KEY.ACCESS_TOKEN_KEY, data.accessToken, options)
+  cookieData.set(COOKIES_KEY.REFRESH_TOKEN_KEY, data.refreshToken, options)
+  cookieData.set(COOKIES_KEY.USER_ID_KEY, data.user_id, options)
 }
 
 export const getCurrentUser = async () => {

@@ -26,7 +26,7 @@ const CouponCard = ({ coupon }: Props) => {
         <div className='flex-1'>
           <p className='text-lg font-semibold'>{coupon.code}</p>
 
-          <p className='text-sm'>
+          <div className='text-sm'>
             Discount{" "}
             <span className='font-medium'>
               {coupon.type === ECouponType.PERCENTAGE
@@ -37,7 +37,7 @@ const CouponCard = ({ coupon }: Props) => {
             {coupon.applyTo === ECouponApplyType.ALL || coupon.productApply.length > 1 ? "products" : "product"} with
             min order value is <span className='font-medium'>{formatCurrency(coupon.minOrderValue)}</span>
             <p className='text-sm'>Expired at: {format(coupon.endDate, "dd/MM/yyyy 'at' HH:mm")}</p>
-          </p>
+          </div>
           <Progress
             value={(coupon.usageCount / coupon.usageLimit) * 100}
             color='warning'

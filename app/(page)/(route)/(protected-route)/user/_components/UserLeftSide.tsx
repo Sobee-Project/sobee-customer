@@ -25,7 +25,7 @@ const UserLeftSide = () => {
       {userRouteMock.map(({ href, items, section, icon: Icon }) => (
         <AccordionItem
           key={href}
-          title={section}
+          title={<Link href={href}>{section}</Link>}
           onPress={() => setSelectedKey(href)}
           classNames={{
             title: cn("font-medium", isNavActive(href, pathname) ? "text-primary" : "text-foreground")

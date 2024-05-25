@@ -8,6 +8,7 @@ export interface IProduct {
   category: ICategory | string
   name: string
   slug?: string
+  shortDescription?: string
   description: string
   displayPrice: number
   minPrice?: number
@@ -19,13 +20,14 @@ export interface IProduct {
   quantity: number
   sold?: number
   status?: EProductStatus
-  favoritesCount?: number
-  variants?: string[] | IVariant[]
+  favoritesBy?: string[]
+  variants?: IVariant[]
   ratingCount?: number
   ratingValue?: number
   isFeatured?: boolean
   isDraft?: boolean
   isDiscount?: boolean
+  isVariation?: boolean
   deletedAt?: string
   createdAt?: string
   updatedAt?: string

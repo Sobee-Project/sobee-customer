@@ -1,5 +1,9 @@
 import type { Metadata } from "next"
+import { CookiesProvider } from "next-client-cookies/server"
 import { Teachers } from "next/font/google"
+import "react-photo-view/dist/react-photo-view.css"
+import "swiper/css"
+import "swiper/css/pagination"
 import "./globals.css"
 import Providers from "./providers"
 
@@ -19,10 +23,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
-      <body className={inter.className}>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
+    <CookiesProvider>
+      <html lang='en'>
+        <body className={inter.className}>
+          <Providers>{children}</Providers>
+        </body>
+      </html>
+    </CookiesProvider>
   )
 }

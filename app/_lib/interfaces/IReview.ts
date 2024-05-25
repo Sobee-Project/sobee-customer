@@ -1,4 +1,5 @@
 import { IProduct } from "./IProduct"
+import { IReply } from "./IReply"
 import { IUser } from "./IUser"
 
 export interface IReview {
@@ -6,9 +7,10 @@ export interface IReview {
   product?: string | IProduct
   customer?: string | IUser
   rating: number
-  title: string
   content: string
   assets: string[]
+  reply?: IReply
+  likes?: string[]
   createdAt?: string
   updatedAt?: string
 }

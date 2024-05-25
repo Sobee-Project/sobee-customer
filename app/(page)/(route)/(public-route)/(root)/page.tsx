@@ -1,11 +1,13 @@
-import { fetchAllBrands, fetchAllCategories, fetchTodayCoupons } from "@/_actions"
 import {
+  fetchAllBrands,
+  fetchAllCategories,
   fetchBestSellerProducts,
   fetchDiscountProducts,
   fetchFeaturedProducts,
   fetchPopularProducts,
-  fetchPublishedProducts
-} from "@/_actions/product-action"
+  fetchPublishedProducts,
+  fetchTodayCoupons
+} from "@/_actions"
 import { IBrand, ICategory, ICoupon, IProduct } from "@/_lib/interfaces"
 import React from "react"
 import { BrandList, Campaign, CategoryList, ProductListWithLabel, TodayCoupons } from "./_components"

@@ -20,10 +20,14 @@ export const API_ROUTES = {
     GET_DRAFT_PRODUCTS: "/product/draft",
     GET_POPULAR_PRODUCTS: "/product/popular",
     GET_BEST_SELLER_PRODUCTS: "/product/best-seller",
-    GET_RELATED_PRODUCTS: "/product/related/:categoryId",
+    GET_RELATED_PRODUCTS: "/product/:id/related",
+    GET_RECOMMEND_PRODUCTS: "/product/:id/recommend",
     GET_DISCOUNT_PRODUCTS: "/product/discount",
     GET_FEATURED_PRODUCTS: "/product/featured",
-    GET_PRODUCT: "/product/:id"
+    GET_PRODUCT: "/product/:id",
+    GET_COLORS: "/product/color",
+    GET_CUSTOMER_FAVORITE_PRODUCTS: "/product/customer/favorite",
+    TOGGLE_FAVORITE_PRODUCT: "/product/:id/favorite"
   },
 
   REVIEW: {
@@ -73,5 +77,22 @@ export const API_ROUTES = {
   COUPONS: {
     GET_COUPONS: "/coupon",
     GET_TODAY_COUPONS: "/coupon/today"
+  },
+  QUESTION: {
+    GET_PRODUCT_QUESTIONS: "/question/product/:id",
+    CREATE_QUESTION: "/question",
+    UPDATE_QUESTION: "/question/:id",
+    DELETE_QUESTION: "/question/:id",
+    LIKE_QUESTION: "/question/:id/like",
+    LIKE_QUESTION_REPLY: "/question/:id/like-reply"
+  },
+  ORDER: {
+    CREATE: "/order",
+    GET_ORDERS: "/order",
+    GET_ORDER: "/order/:id",
+    ADD_ORDER_ITEM: "/order/item",
+    UPDATE_ORDER_ITEM_QUANTITY: "/order/item/:id/quantity",
+    DELETE_ORDER_ITEM: "/order/item/:id",
+    CANCEL_ORDER: "/order/:id/cancel"
   }
 }

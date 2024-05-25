@@ -1,8 +1,7 @@
-import { ENV_CONFIG } from "@/_constants"
-import { BaseResponse, ErrorResponse, SucccessResponse } from "@/_lib/types"
-import { getCredentialsFromCookie } from "@/_utils"
+import { COOKIES_KEY, ENV_CONFIG } from "@/_constants"
+import { ErrorResponse, SucccessResponse } from "@/_lib/types"
+import { convertToQuery } from "@/_utils"
 import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies"
-import { redirect } from "next/navigation"
 
 type Options = {
   params?: Record<string, any>
@@ -29,9 +28,15 @@ const _FETCH = async <T extends any>(
   isFormData && opts.headers && delete opts.headers["Content-Type"]
 
   try {
-    const params = new URLSearchParams(opts.params)
     const apiUrl = url.startsWith("http") ? url : `${ENV_CONFIG.BASE_API_URL}${url}`
-    const res = await fetch(`${apiUrl}?${params.toString()}`, opts)
+
+    const queries = opts.params
+      ? Object.keys(opts.params as {})
+          .map((key) => (opts.params?.[key] ? convertToQuery(key, opts.params?.[key]) : []))
+          .join("&")
+      : ""
+
+    const res = await fetch(`${apiUrl}?${queries}`, opts)
     const data = await res.json()
     return data as SucccessResponse<T>
   } catch (error: any) {
@@ -44,13 +49,15 @@ const _FETCH = async <T extends any>(
 }
 
 const FETCH_WITH_TOKEN = async <T extends any>(url: string, options?: Options) => {
-  const { accessToken, user_id } = getCredentialsFromCookie(options?.cookies)
+  const cookieData = options?.cookies?.()
+  const accessToken = cookieData?.get(COOKIES_KEY.ACCESS_TOKEN_KEY)
+  const user_id = cookieData?.get(COOKIES_KEY.USER_ID_KEY)
   return await _FETCH<T>(url, {
     ...options,
     headers: {
       ...options?.headers,
-      Authorization: "Bearer " + accessToken,
-      "x-client-id": user_id
+      Authorization: "Bearer " + accessToken?.value,
+      "x-client-id": user_id?.value
     } as HeadersInit
   })
 }

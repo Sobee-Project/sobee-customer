@@ -1,8 +1,10 @@
 "use client"
-import { APP_ROUTES } from "@/_constants"
+import { createOrderItem, toggleFavorite } from "@/_actions"
+import { APP_ROUTES, COOKIES_KEY } from "@/_constants"
 import { EProductType } from "@/_lib/enums"
 import { IBrand, ICategory, IVariant } from "@/_lib/interfaces"
 import { cn, formatCurrency } from "@/_lib/utils"
+import { productInitialState as productCardInitialState, productReducer as productCardReducer } from "@/_reducer"
 import {
   Avatar,
   Button,
@@ -16,21 +18,47 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@nextui-org/react"
-import { Minus, Plus, ShoppingBasket } from "lucide-react"
+import { Heart, Minus, Plus, ShoppingBasket } from "lucide-react"
+import { useCookies } from "next-client-cookies"
+import { useAction } from "next-safe-action/hooks"
 import Image from "next/image"
 import Link from "next/link"
-import React, { useCallback, useMemo, useReducer, useState } from "react"
-import { Rating } from "react-simple-star-rating"
+import { useCallback, useMemo, useReducer } from "react"
+import toast from "react-hot-toast"
 import RatingStars from "../RatingStarts"
-import { productCardInitialState, productCardReducer } from "./ProductCard.reducer"
 import { ProductCardProps } from "./ProductCard.type"
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const variants = product.variants as IVariant[]
   const brand = product.brand ? (product.brand as IBrand) : null
   const category = product.category as ICategory
+  const cookies = useCookies()
+  const userId = cookies.get(COOKIES_KEY.USER_ID_KEY)
 
   const [{ quantity, selectedVariants }, dispatch] = useReducer(productCardReducer, productCardInitialState)
+
+  const isFavoriteByUser = userId ? product.favoritesBy?.includes(userId) : false
+
+  const { execute: executeToggleFavorite } = useAction(toggleFavorite, {
+    onSuccess: ({ data }) => {
+      if (!data.success) {
+        toast.error(data.message)
+      }
+    }
+  })
+
+  const { status, execute: executeCreateOrderItem } = useAction(createOrderItem, {
+    onSuccess: ({ data }) => {
+      if (data.success) {
+        toast.success("Added to cart")
+        console.log(data)
+      } else {
+        toast.error(data.message)
+      }
+    }
+  })
+
+  const isLoading = status === "executing"
 
   const optimizedData = useMemo(
     () => [
@@ -46,9 +74,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
     [variants]
   )
 
-  const getAssetsFromSelectedVariants = useMemo(() => {
-    if (!selectedVariants.color || !selectedVariants.size) return []
-    return variants.find((v) => v.color === selectedVariants.color && v.size === selectedVariants.size)?.assets || []
+  const getSelectedVariants = useMemo(() => {
+    if (!selectedVariants.color || !selectedVariants.size) return {} as IVariant
+    return (
+      variants.find((v) => v.color === selectedVariants.color && v.size === selectedVariants.size) || ({} as IVariant)
+    )
   }, [selectedVariants, variants])
 
   const calculateDiscount = useCallback(
@@ -66,37 +96,66 @@ const ProductCard = ({ product }: ProductCardProps) => {
   }, [calculateDiscount, product.displayPrice, product.maxPrice, product.minPrice, product.type])
 
   const renderDiscountPrice = useCallback(() => {
-    return discountPrice.map((v) => formatCurrency(v)).join(" - ")
-  }, [discountPrice])
+    return discountPrice.map((v) => formatCurrency(v * quantity)).join(" - ")
+  }, [discountPrice, quantity])
 
   const renderPrice = useCallback(() => {
-    return (product.type === EProductType.SIMPLE ? [product.displayPrice] : [product.minPrice, product.maxPrice])
-      .map((v) => formatCurrency(v))
+    return (
+      product.type === EProductType.SIMPLE ? [product.displayPrice] : [product.minPrice || 0, product.maxPrice || 0]
+    )
+      .map((v) => formatCurrency(v * quantity))
       .join(" - ")
-  }, [product.displayPrice, product.maxPrice, product.minPrice, product.type])
+  }, [product.displayPrice, product.maxPrice, product.minPrice, product.type, quantity])
 
   const onPressAddToCart = useCallback(() => {
-    if (product.type === EProductType.VARIABLE) {
+    if (product.isVariation) {
+      executeCreateOrderItem({
+        product: product._id!,
+        amount: quantity,
+        color: selectedVariants.color,
+        size: selectedVariants.size
+      })
+    } else {
+      executeCreateOrderItem({
+        product: product._id!,
+        amount: quantity
+      })
     }
-  }, [])
+  }, [executeCreateOrderItem, product, selectedVariants, quantity])
 
   return (
     <Card className='h-full min-w-60 transition-transform hover:scale-[1.008]' shadow='sm'>
       <CardHeader className='relative'>
         {product.isDiscount && (
-          <Chip className='absolute right-0 top-0' radius='md' color='danger' size='lg'>
+          <Chip className='absolute right-0 top-0 z-[2]' radius='md' color='danger' size='lg'>
             <span className=''>Discount {(product.discount || 0) * 100}%</span>
           </Chip>
         )}
-        <Link href={APP_ROUTES.PRODUCTS.ID.replace(":id", product.slug!)} className='size-full'>
-          <Image
-            src={product.thumbnail}
-            alt={product.name}
-            width={400}
-            height={400}
-            className='h-60 w-full rounded-md object-contain sm:object-cover'
-          />
-        </Link>
+        {userId && (
+          <Button
+            className='group absolute left-4 top-4 z-[2] bg-background'
+            radius='full'
+            variant='light'
+            size='lg'
+            isIconOnly
+            onPress={() => executeToggleFavorite(product._id!)}
+          >
+            <Heart
+              size={20}
+              className={cn(
+                "group-hover:fill-danger-400 group-hover:stroke-danger-400",
+                isFavoriteByUser ? "fill-danger-400 stroke-danger-400" : "fill-none stroke-current"
+              )}
+            />
+          </Button>
+        )}
+        <Image
+          src={product.thumbnail}
+          alt={product.name}
+          width={400}
+          height={400}
+          className='h-60 w-full rounded-md object-contain sm:object-cover'
+        />
       </CardHeader>
       <CardBody className='flex flex-col gap-2'>
         <div className='flex flex-1 flex-col gap-2'>
@@ -141,9 +200,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           >
             {renderPrice()}
           </h4>
-          {product.isDiscount && (
-            <h4 className='line-clamp-1 flex-1 text-3xl font-medium text-primary'>{renderDiscountPrice()}</h4>
-          )}
+          {product.isDiscount && <h4 className=' flex-1 text-3xl font-medium text-primary'>{renderDiscountPrice()}</h4>}
         </div>
       </CardBody>
       <CardFooter className='gap-2'>
@@ -198,11 +255,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
             color='primary'
             className='flex-1'
             radius='sm'
+            onPress={onPressAddToCart}
+            isLoading={isLoading}
+            isDisabled={isLoading || product.quantity === 0}
           >
             Add to Cart
           </Button>
         ) : (
-          <Popover showArrow>
+          <Popover showArrow isDismissable={!isLoading}>
             <PopoverTrigger>
               <Button
                 startContent={<ShoppingBasket size={16} />}
@@ -247,8 +307,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
                     </div>
                   )
                 })}
-                <div className={cn("grid", getAssetsFromSelectedVariants.length > 1 && "grid-cols-2")}>
-                  {getAssetsFromSelectedVariants.map((asset) => (
+                <div className={cn("grid", (getSelectedVariants.assets || [])?.length > 1 && "grid-cols-2")}>
+                  {(getSelectedVariants.assets || []).map((asset) => (
                     <Image
                       src={asset!}
                       alt={product.name}
@@ -259,16 +319,27 @@ const ProductCard = ({ product }: ProductCardProps) => {
                     />
                   ))}
                 </div>
-                {
-                  <Button
-                    color='primary'
-                    isDisabled={!selectedVariants.color || !selectedVariants.size}
-                    size='sm'
-                    radius='sm'
-                  >
-                    Get
-                  </Button>
-                }
+                {getSelectedVariants.amount && (
+                  <p>
+                    <span className='font-medium'>{getSelectedVariants.amount}</span> left in stock.
+                  </p>
+                )}
+                <Button
+                  color='primary'
+                  isDisabled={
+                    !selectedVariants.color ||
+                    !selectedVariants.size ||
+                    isLoading ||
+                    product.quantity === 0 ||
+                    getSelectedVariants.amount === 0
+                  }
+                  size='sm'
+                  radius='sm'
+                  onPress={onPressAddToCart}
+                  isLoading={isLoading}
+                >
+                  Get
+                </Button>
               </div>
             </PopoverContent>
           </Popover>

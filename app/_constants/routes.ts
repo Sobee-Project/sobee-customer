@@ -34,6 +34,7 @@ export const APP_ROUTES = {
   USER: {
     ACCOUNT: {
       PROFILE: "/user/account/profile",
+      FAVORITE: "/user/account/favorite",
       BANK_ACCOUNT: "/user/account/bank-account",
       ADDRESS: "/user/account/address",
       CHANGE_PASSWORD: "/user/account/change-password"
