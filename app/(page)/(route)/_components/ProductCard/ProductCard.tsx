@@ -285,7 +285,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                           <Button
                             key={val}
                             size='sm'
-                            color={selectedVariants[variant.name]?.includes(val) ? "primary" : "default"}
+                            color={selectedVariants[variant.name] === val ? "primary" : "default"}
                             className='h-6 min-w-14 cursor-pointer py-1'
                             style={
                               variant.name === "color"

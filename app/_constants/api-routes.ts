@@ -76,7 +76,8 @@ export const API_ROUTES = {
   },
   COUPONS: {
     GET_COUPONS: "/coupon",
-    GET_TODAY_COUPONS: "/coupon/today"
+    GET_TODAY_COUPONS: "/coupon/today",
+    APPLY_COUPON: "/coupon/validate"
   },
   QUESTION: {
     GET_PRODUCT_QUESTIONS: "/question/product/:id",
@@ -93,6 +94,10 @@ export const API_ROUTES = {
     ADD_ORDER_ITEM: "/order/item",
     UPDATE_ORDER_ITEM_QUANTITY: "/order/item/:id/quantity",
     DELETE_ORDER_ITEM: "/order/item/:id",
-    CANCEL_ORDER: "/order/:id/cancel"
+    CANCEL_ORDER: "/order/:id/cancel",
+    GET_ORDER_ITEMS: "/order/item"
+  },
+  PAYMENT_METHODS: {
+    GET_PAYMENT_METHODS: "/payment-method"
   }
 }

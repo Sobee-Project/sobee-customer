@@ -55,5 +55,8 @@ export const CACHE_KEY = {
   },
   ORDER_ITEM: {
     GET_ALL: "ORDER_ITEM_GET_ALL"
+  },
+  PAYMENT_METHODS: {
+    GET_ALL: "PAYMENT_METHODS_GET_ALL"
   }
 }

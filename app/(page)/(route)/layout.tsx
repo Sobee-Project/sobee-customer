@@ -1,4 +1,5 @@
-import { getCurrentUser } from "@/_actions"
+import { fetchOrderItems, getCurrentUser } from "@/_actions"
+import { IOrderItem } from "@/_lib/interfaces"
 import { PropsWithChildren } from "react"
 import { Footer, Topbar } from "./_components"
 
@@ -7,9 +8,18 @@ import { Footer, Topbar } from "./_components"
 const layout = async ({ children }: PropsWithChildren) => {
   const res = await getCurrentUser()
   const user = res.data?.user
+
+  let cart = [] as IOrderItem[]
+  if (user) {
+    const cartRes = await fetchOrderItems()
+    if (cartRes.success) {
+      cart = cartRes.data!
+    }
+  }
+
   return (
     <div className='min-h-screen'>
-      <Topbar user={user} />
+      <Topbar user={user} cart={cart} />
       <div className='min-h-[80vh]'>{children}</div>
       <Footer />
     </div>

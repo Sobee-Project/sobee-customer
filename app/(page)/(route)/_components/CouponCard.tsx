@@ -4,15 +4,18 @@ import { ICoupon } from "@/_lib/interfaces"
 import { formatCurrency } from "@/_lib/utils"
 import { Button, Card, CardBody, CardFooter, Progress } from "@nextui-org/react"
 import { format } from "date-fns"
+import { Trash2Icon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
 
 type Props = {
   coupon: ICoupon
+  action?: "save" | "apply"
+  onRemove?: (coupon: ICoupon) => void
 }
 
-const CouponCard = ({ coupon }: Props) => {
+const CouponCard = ({ coupon, action = "save", onRemove = () => {} }: Props) => {
   return (
     <Card className='w-full' shadow='sm'>
       <CardBody className='justify-between gap-4 sm:flex-row'>
@@ -47,9 +50,15 @@ const CouponCard = ({ coupon }: Props) => {
             }}
           />
         </div>
-        <Button variant='solid' color='primary' radius='sm'>
-          Save
-        </Button>
+        {action === "save" ? (
+          <Button variant='solid' color='primary' radius='sm'>
+            Save
+          </Button>
+        ) : (
+          <Button variant='light' color='danger' radius='sm' isIconOnly onPress={() => onRemove(coupon)}>
+            <Trash2Icon size={20} />
+          </Button>
+        )}
       </CardBody>
     </Card>
   )

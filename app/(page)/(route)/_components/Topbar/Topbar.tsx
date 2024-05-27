@@ -2,7 +2,7 @@
 import { invalidateCookies } from "@/_actions"
 import { Logo, ScreenLoader, ThemeSwitcher } from "@/_components"
 import { APP_ROUTES } from "@/_constants"
-import { IUser } from "@/_lib/interfaces"
+import { IOrderItem, IUser } from "@/_lib/interfaces"
 import { cn } from "@/_lib/utils"
 import { isNavActive } from "@/_utils"
 import { Button, Spinner } from "@nextui-org/react"
@@ -24,11 +24,17 @@ const UserMenu = dynamic(() => import("./UserMenu"), {
   loading: () => <Spinner />
 })
 
+const CartMenu = dynamic(() => import("./CartMenu"), {
+  ssr: false,
+  loading: () => <Spinner />
+})
+
 type Props = {
   user?: IUser
+  cart?: IOrderItem[]
 }
 
-const Topbar = ({ user }: Props) => {
+const Topbar = ({ user, cart }: Props) => {
   const pathname = usePathname()
 
   const [showMenu, setShowMenu] = useState(false)
@@ -73,10 +79,14 @@ const Topbar = ({ user }: Props) => {
         <div className='flex gap-4'>
           <ThemeSwitcher />
           {user && (
-            <Button isIconOnly variant='light' radius='full' as={Link} href={APP_ROUTES.CARTS}>
-              <ShoppingCart size={24} />
-            </Button>
+            <>
+              <CartMenu cart={cart || []} />
+              <Button isIconOnly variant='light' radius='full' className='md:hidden' as={Link} href={APP_ROUTES.CARTS}>
+                <ShoppingCart size={24} />
+              </Button>
+            </>
           )}
+
           {user && <UserMenu user={user} />}
         </div>
         {!user && (

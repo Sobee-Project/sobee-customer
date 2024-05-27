@@ -1,11 +1,14 @@
-import { cn } from "@/_lib/utils"
+import { IOrder } from "@/_lib/interfaces"
+import { cn, formatCurrency } from "@/_lib/utils"
+import { format } from "date-fns"
 
 type Props = {
   isActive: boolean
   onClick?: (e: any) => void
+  order: IOrder
 }
 
-const OrderCard = ({ isActive, onClick }: Props) => {
+const OrderCard = ({ isActive, onClick, order }: Props) => {
   return (
     <div
       onClick={onClick}
@@ -18,7 +21,7 @@ const OrderCard = ({ isActive, onClick }: Props) => {
       <div className='flex items-center justify-between border-b border-gray-400 px-5 py-3 md:px-3 lg:px-5 '>
         <span className='mr-4 flex shrink-0 text-sm  font-bold lg:text-base'>
           Order
-          <span className='font-normal'>#{48}</span>
+          <span className='font-normal'>{order.orderGeneratedId}</span>
         </span>
         <span
           // className="max-w-full truncate whitespace-nowrap rounded bg-blue-100 px-3 py-2 text-sm text-blue-500"
@@ -33,22 +36,17 @@ const OrderCard = ({ isActive, onClick }: Props) => {
         <p className=' mb-4 flex w-full items-center justify-between text-sm last:mb-0'>
           <span className='w-24 shrink-0 overflow-hidden'>{"Order Date"}</span>
           <span className='mr-auto'>:</span>
-          <span className='ml-1'>{"May 15, 2024"}</span>
+          <span className='ml-1'>{format(order.createdAt!, "dd/MM/yyyy HH:mm")}</span>
         </p>
         <p className=' mb-4 flex w-full items-center justify-between text-sm last:mb-0'>
-          <span className='w-24 shrink-0 overflow-hidden'>{"Delivery Time"}</span>
+          <span className='w-24 shrink-0 overflow-hidden'>{"Latest update"}</span>
           <span className='mr-auto'>:</span>
-          <span className='ml-1 truncate'>{"Express Delivery"}</span>
+          <span className='ml-1 truncate'>{format(order.updatedAt!, "dd/MM/yyyy HH:mm")}</span>
         </p>
         <p className=' mb-4 flex w-full items-center justify-between text-sm font-bold last:mb-0'>
-          <span className='w-24 shrink-0 overflow-hidden'>{"Amount"}</span>
+          <span className='w-24 shrink-0 overflow-hidden'>{"Total"}</span>
           <span className='mr-auto'>:</span>
-          <span className='ml-1'>{"$280.00"}</span>
-        </p>
-        <p className=' mb-4 flex w-full items-center justify-between text-sm font-bold last:mb-0'>
-          <span className='w-24 shrink-0 overflow-hidden'>{"Total Price"}</span>
-          <span className='mr-auto'>:</span>
-          <span className='ml-1'>{"$280.00"}</span>
+          <span className='ml-1'>{formatCurrency(order.total)}</span>
         </p>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { EProductStatus, EProductType } from "@/_lib/enums"
 import { IBrand } from "./IBrand"
 import { ICategory } from "./ICategory"
+import { IShipping } from "./IShipping"
+import { ITax } from "./ITax"
 import { IVariant } from "./IVariant"
 
 export interface IProduct {
@@ -14,6 +16,8 @@ export interface IProduct {
   minPrice?: number
   maxPrice?: number
   brand?: string | IBrand
+  tax?: string | ITax
+  shippingFee?: string | IShipping
   discount?: number
   type?: EProductType | string
   thumbnail: string

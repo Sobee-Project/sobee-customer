@@ -1,6 +1,6 @@
 "use client"
 import RatingStars from "@/(page)/(route)/_components/RatingStarts"
-import { toggleFavorite } from "@/_actions"
+import { createOrderItem, toggleFavorite } from "@/_actions"
 import { COOKIES_KEY } from "@/_constants"
 import { EProductType } from "@/_lib/enums"
 import { IProduct } from "@/_lib/interfaces"
@@ -71,7 +71,7 @@ const ProductDetails = ({ product }: Props) => {
     return variant
   }, [product, selectedVariants])
 
-  const { execute, status } = useAction(toggleFavorite, {
+  const { execute } = useAction(toggleFavorite, {
     onSuccess: ({ data }) => {
       if (!data.success) {
         toast.error(data.message)
@@ -90,11 +90,45 @@ const ProductDetails = ({ product }: Props) => {
     }
   }, [getViaSelectedVariants, quantity])
 
+  const { status, execute: executeCreateOrderItem } = useAction(createOrderItem, {
+    onSuccess: ({ data }) => {
+      if (data.success) {
+        toast.success("Added to cart")
+        console.log(data)
+      } else {
+        toast.error(data.message)
+      }
+    }
+  })
+
+  const isLoading = status === "executing"
+
+  const onPressAddToCart = useCallback(() => {
+    if (product.isVariation) {
+      executeCreateOrderItem({
+        product: product._id!,
+        amount: quantity,
+        color: selectedVariants.color,
+        size: selectedVariants.size
+      })
+    } else {
+      executeCreateOrderItem({
+        product: product._id!,
+        amount: quantity
+      })
+    }
+  }, [executeCreateOrderItem, product, selectedVariants, quantity])
+
   return (
     <>
       <div className='space-y-4'>
         <div className='flex items-center gap-2'>
-          <h1 className='flex-1 text-2xl font-bold'>{product.name}</h1>
+          <h1 className='flex-1 text-2xl font-bold'>
+            <span className='text-warning-500'>
+              {product.isDiscount ? `[-${(product.discount || 0) * 100}%] ` : " "}
+            </span>
+            {product.name}
+          </h1>
           <Tooltip
             content={!isFavoriteByUser ? "Add to favorite" : "Remove from favorite"}
             placement='bottom'
@@ -150,7 +184,7 @@ const ProductDetails = ({ product }: Props) => {
                       <Button
                         key={val}
                         size='sm'
-                        color={selectedVariants[variant.name]?.includes(val) ? "primary" : "default"}
+                        color={selectedVariants[variant.name] === val ? "primary" : "default"}
                         className='h-8 min-w-14 cursor-pointer py-1 text-base'
                         style={
                           variant.name === "color"
@@ -189,7 +223,7 @@ const ProductDetails = ({ product }: Props) => {
                   payload: quantity - 1
                 })
               }
-              isDisabled={quantity <= 1}
+              isDisabled={quantity <= 1 || isLoading}
             >
               <Minus size={16} />
             </Button>
@@ -207,6 +241,7 @@ const ProductDetails = ({ product }: Props) => {
                   payload: v === "" ? 1 : Number(v)
                 })
               }
+              isDisabled={isLoading}
             />
             <Button
               radius='full'
@@ -219,8 +254,9 @@ const ProductDetails = ({ product }: Props) => {
                 })
               }
               isDisabled={
-                product.type === EProductType.VARIABLE &&
-                (!getViaSelectedVariants || (getViaSelectedVariants && quantity >= getViaSelectedVariants.amount))
+                (product.type === EProductType.VARIABLE &&
+                  (!getViaSelectedVariants || (getViaSelectedVariants && quantity >= getViaSelectedVariants.amount))) ||
+                isLoading
               }
             >
               <Plus size={16} />
@@ -231,7 +267,9 @@ const ProductDetails = ({ product }: Props) => {
             className='flex-1 rounded-full'
             size='lg'
             startContent={<ShoppingBag />}
-            isDisabled={product.type === EProductType.VARIABLE && !getViaSelectedVariants}
+            isDisabled={(product.type === EProductType.VARIABLE && !getViaSelectedVariants) || isLoading}
+            isLoading={isLoading}
+            onPress={onPressAddToCart}
           >
             Add to cart
           </Button>
