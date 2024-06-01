@@ -154,7 +154,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           alt={product.name}
           width={400}
           height={400}
-          className='h-60 w-full rounded-md object-contain sm:object-cover'
+          className='h-60 w-full rounded-md object-contain'
         />
       </CardHeader>
       <CardBody className='flex flex-col gap-2'>
