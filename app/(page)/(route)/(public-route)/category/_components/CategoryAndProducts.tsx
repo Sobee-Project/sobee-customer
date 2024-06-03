@@ -13,8 +13,9 @@ type Props = {
 } & ICategory
 
 const CategoryAndProducts = ({ name, slug, products }: Props) => {
+  if (products.length === 0) return null
   return (
-    <div className='w-full space-y-4'>
+    <div className='w-full'>
       <div className='flex items-center justify-between'>
         <h3 className='text-2xl font-semibold'>{name}</h3>
         <Link
@@ -48,19 +49,25 @@ const CategoryAndProducts = ({ name, slug, products }: Props) => {
               slidesPerView: 1
             },
             400: {
-              slidesPerView: 2
+              slidesPerView: 1
             },
             768: {
-              slidesPerView: 2
+              slidesPerView: 1
             },
             1100: {
+              slidesPerView: 2
+            },
+            1200: {
               slidesPerView: 3
             },
-            1400: {
+            1500: {
               slidesPerView: 4
             },
-            1600: {
+            1700: {
               slidesPerView: 5
+            },
+            2000: {
+              slidesPerView: 6
             }
           }}
         >
