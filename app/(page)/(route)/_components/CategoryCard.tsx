@@ -22,14 +22,14 @@ const CategoryCard = ({ category }: Props) => {
             width={200}
             height={200}
             quality={100}
-            className='h-40 w-full border-b object-cover object-center'
+            className='h-40 w-full border-b bg-white object-contain object-center'
           />
         </CardHeader>
         <CardBody>
           <h3 className='mb-4 text-center font-medium'>{category.name}</h3>
           <Button
             as={Link}
-            href={APP_ROUTES.CATEGORIES.ID.replace(":id", category._id!)}
+            href={APP_ROUTES.CATEGORIES.ID.replace(":id", category.slug)}
             radius='full'
             color='primary'
             fullWidth
