@@ -24,7 +24,7 @@ const BrandCard = ({ brand }: Props) => {
           />
         </CardHeader>
         <CardBody>
-          <h3 className='mb-4 text-center font-medium'>{brand.name}</h3>
+          <h3 className='mb-4 line-clamp-1 text-center font-medium'>{brand.name}</h3>
           <Button
             as={Link}
             href={APP_ROUTES.CATEGORIES.ID.replace(":id", brand._id!)}
