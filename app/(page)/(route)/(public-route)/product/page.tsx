@@ -1,7 +1,8 @@
-import { fetchAllCategories, fetchAllColors, fetchPublishedProducts } from "@/_actions"
+import { fetchAllCategories, fetchAllColors, fetchAllProducts } from "@/_actions"
 import { ICategory, IProduct } from "@/_lib/interfaces"
 import React from "react"
-import { FilterMenu, ProductList } from "./_components"
+import { ProductList } from "../../_components"
+import { FilterMenu } from "./_components"
 
 const page = async ({ searchParams }: any) => {
   let categories = [] as ICategory[]
@@ -10,7 +11,7 @@ const page = async ({ searchParams }: any) => {
 
   const categoriesPromise = fetchAllCategories()
   const colorsPromise = fetchAllColors()
-  const productsPromise = fetchPublishedProducts(searchParams as any)
+  const productsPromise = fetchAllProducts(searchParams as any)
 
   const [productRes, categoriesRes, colorsRes] = await Promise.all([productsPromise, categoriesPromise, colorsPromise])
 
@@ -20,7 +21,7 @@ const page = async ({ searchParams }: any) => {
   return (
     <>
       <FilterMenu categories={categories} colors={colors} />
-      <ProductList products={products} />
+      <ProductList initialProducts={products} searchParams={searchParams} paginationRes={{ ...productRes }} />
     </>
   )
 }

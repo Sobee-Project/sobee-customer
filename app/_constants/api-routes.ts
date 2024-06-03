@@ -15,8 +15,7 @@ export const API_ROUTES = {
   },
 
   PRODUCT: {
-    GET_PRODUCTS: "/product",
-    GET_PUBLISHED_PRODUCTS: "/product/published",
+    GET_ALL_PRODUCTS: "/product",
     GET_DRAFT_PRODUCTS: "/product/draft",
     GET_POPULAR_PRODUCTS: "/product/popular",
     GET_BEST_SELLER_PRODUCTS: "/product/best-seller",
@@ -39,11 +38,15 @@ export const API_ROUTES = {
   },
   CATEGORY: {
     GET_CATEGORIES: "/category",
-    GET_CATEGORY: "/category/:id"
+    GET_CATEGORY: "/category/:id",
+    GET_CATEGORY_PRODUCTS: "/category/:id/product",
+    GET_CATEGORY_AND_PRODUCTS: "/category/product"
   },
   BRAND: {
     GET_BRANDS: "/brand",
-    GET_BRAND: "/brand/:id"
+    GET_BRAND: "/brand/:id",
+    GET_BRAND_PRODUCTS: "/brand/:id/product",
+    GET_BRAND_AND_PRODUCTS: "/brand/product"
   },
   UPLOAD: {
     UPLOAD_FILE: "/upload",

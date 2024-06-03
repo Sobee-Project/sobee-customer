@@ -5,8 +5,9 @@ import { APP_ROUTES } from "@/_constants"
 import { IOrderItem, IUser } from "@/_lib/interfaces"
 import { cn } from "@/_lib/utils"
 import { isNavActive } from "@/_utils"
-import { Button, Spinner } from "@nextui-org/react"
+import { Badge, Button, Spinner } from "@nextui-org/react"
 import { Menu, ShoppingCart } from "lucide-react"
+import { useCookies } from "next-client-cookies"
 import { useAction } from "next-safe-action/hooks"
 import dynamic from "next/dynamic"
 import Link from "next/link"
@@ -82,7 +83,9 @@ const Topbar = ({ user, cart }: Props) => {
             <>
               <CartMenu cart={cart || []} />
               <Button isIconOnly variant='light' radius='full' className='md:hidden' as={Link} href={APP_ROUTES.CARTS}>
-                <ShoppingCart size={24} />
+                <Badge content={cart?.length || 0} color='danger'>
+                  <ShoppingCart size={24} />
+                </Badge>
               </Button>
             </>
           )}

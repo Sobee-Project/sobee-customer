@@ -2,6 +2,7 @@
 import { cn } from "@/_lib/utils"
 import { isNavActive } from "@/_utils"
 import { Accordion, AccordionItem } from "@nextui-org/react"
+import { ChevronDown } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"

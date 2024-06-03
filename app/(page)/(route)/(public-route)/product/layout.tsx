@@ -1,4 +1,3 @@
-import { LayoutParamsProps } from "@/_lib/params"
 import React from "react"
 
 const layout = ({ children }: any) => {

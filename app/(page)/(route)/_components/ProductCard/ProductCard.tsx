@@ -124,7 +124,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   }, [executeCreateOrderItem, product, selectedVariants, quantity])
 
   return (
-    <Card className='h-full min-w-60 transition-transform hover:scale-[1.008]' shadow='sm'>
+    <Card className='h-full min-w-60 max-w-96 transition-transform hover:scale-[1.008]' shadow='sm'>
       <CardHeader className='relative'>
         {product.isDiscount && (
           <Chip className='absolute right-0 top-0 z-[2]' radius='md' color='danger' size='lg'>
@@ -154,7 +154,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           alt={product.name}
           width={400}
           height={400}
-          className='h-60 w-full rounded-md object-contain'
+          className='h-60 w-full rounded-md bg-white object-contain'
         />
       </CardHeader>
       <CardBody className='flex flex-col gap-2'>

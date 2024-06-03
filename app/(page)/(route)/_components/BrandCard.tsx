@@ -1,6 +1,7 @@
 import { APP_ROUTES } from "@/_constants"
 import { IBrand } from "@/_lib/interfaces"
-import { Card, CardBody, CardHeader } from "@nextui-org/react"
+import { countableText } from "@/_utils"
+import { Button, Card, CardBody, CardHeader } from "@nextui-org/react"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
@@ -11,7 +12,7 @@ type Props = {
 
 const BrandCard = ({ brand }: Props) => {
   return (
-    <Link href={APP_ROUTES.BRANDS.ID.replace(":id", brand.slug)} className='transition-transform hover:scale-[1.008]'>
+    <div className='transition-transform hover:scale-[1.008]'>
       <Card className='md:min-w-32' shadow='sm'>
         <CardHeader className='justify-center'>
           <Image
@@ -23,10 +24,19 @@ const BrandCard = ({ brand }: Props) => {
           />
         </CardHeader>
         <CardBody>
-          <h3 className='text-center font-medium'>{brand.name}</h3>
+          <h3 className='mb-4 text-center font-medium'>{brand.name}</h3>
+          <Button
+            as={Link}
+            href={APP_ROUTES.CATEGORIES.ID.replace(":id", brand._id!)}
+            radius='full'
+            color='primary'
+            fullWidth
+          >
+            View {brand.productCount || 0} {countableText(brand.productCount || 0, "product", "products")}
+          </Button>
         </CardBody>
       </Card>
-    </Link>
+    </div>
   )
 }
 

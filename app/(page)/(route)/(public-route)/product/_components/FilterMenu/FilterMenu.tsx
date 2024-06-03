@@ -105,7 +105,7 @@ const LeftSideBar = ({ categories, colors }: Props) => {
     })
     dispatch({
       type: "SET_PRICE_RANGE",
-      payload: priceRange.length === 2 ? priceRange : [1, 5000]
+      payload: priceRange.length === 2 ? priceRange : [1, 1000]
     })
     dispatch({
       type: "SET_SIZES",
@@ -202,7 +202,7 @@ const LeftSideBar = ({ categories, colors }: Props) => {
 
       <div
         className={cn(
-          "fixed z-50 max-h-[90vh] w-64 overflow-auto rounded border bg-background transition-transform scrollbar-hide lg:sticky lg:top-20 lg:z-auto lg:block lg:max-h-max lg:w-80 lg:!translate-x-0 lg:self-start",
+          "fixed z-50 max-h-[90vh] w-64 overflow-auto rounded border bg-background transition-transform scrollbar-hide lg:sticky lg:top-20 lg:z-auto lg:block lg:w-80 lg:!translate-x-0 lg:self-start",
           showMenu ? "translate-x-0" : "-translate-x-[200%]"
         )}
       >
@@ -251,7 +251,7 @@ const LeftSideBar = ({ categories, colors }: Props) => {
             }}
             showTooltip
             minValue={1}
-            maxValue={5000}
+            maxValue={1000}
             step={1}
             value={selectedPriceRange}
             formatOptions={{ style: "currency", currency: "USD" }}

@@ -1,6 +1,8 @@
+"use client"
 import { APP_ROUTES } from "@/_constants"
 import { ICategory } from "@/_lib/interfaces"
-import { Card, CardBody, CardHeader } from "@nextui-org/react"
+import { countableText } from "@/_utils"
+import { Button, Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
@@ -11,25 +13,32 @@ type Props = {
 
 const CategoryCard = ({ category }: Props) => {
   return (
-    <Link
-      href={APP_ROUTES.CATEGORIES.ID.replace(":id", category.slug)}
-      className='transition-transform hover:scale-[1.008]'
-    >
-      <Card className='min-w-32' shadow='sm'>
-        <CardHeader className='justify-center'>
+    <div className='transition-transform hover:scale-[1.008]'>
+      <Card className='min-w-32 p-0' shadow='sm' radius='sm'>
+        <CardHeader className='justify-center p-0'>
           <Image
             src={category.image!}
             alt={category.name}
-            width={100}
-            height={100}
-            className='size-28 rounded-full border object-contain object-center'
+            width={200}
+            height={200}
+            quality={100}
+            className='h-40 w-full border-b object-cover object-center'
           />
         </CardHeader>
         <CardBody>
-          <h3 className='text-center font-medium'>{category.name}</h3>
+          <h3 className='mb-4 text-center font-medium'>{category.name}</h3>
+          <Button
+            as={Link}
+            href={APP_ROUTES.CATEGORIES.ID.replace(":id", category._id!)}
+            radius='full'
+            color='primary'
+            fullWidth
+          >
+            View {category.productCount || 0} {countableText(category.productCount || 0, "product", "products")}
+          </Button>
         </CardBody>
       </Card>
-    </Link>
+    </div>
   )
 }
 

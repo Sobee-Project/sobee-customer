@@ -70,8 +70,14 @@ const OrderItemCard = ({ orderItem, hideQuantity = false }: Props) => {
 
   return (
     <div className='flex gap-4'>
-      <div className='grid w-24 place-items-center rounded-lg bg-slate-100 p-2 dark:bg-slate-700'>
-        <Image src={product.thumbnail} alt={product.name} width={100} height={100} className='w-full object-contain' />
+      <div className='grid w-24 place-items-center overflow-hidden rounded-lg border'>
+        <Image
+          src={product.thumbnail || ""}
+          alt={product.name}
+          width={100}
+          height={100}
+          className='w-full object-contain'
+        />
       </div>
       <div className='flex-1'>
         <div className='flex h-full flex-wrap gap-2'>

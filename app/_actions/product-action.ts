@@ -8,11 +8,11 @@ import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-export const fetchPublishedProducts = async (query?: Record<string, any>) => {
-  const res = await FETCH.get<IProduct[]>(API_ROUTES.PRODUCT.GET_PUBLISHED_PRODUCTS, {
+export const fetchAllProducts = async (query?: Record<string, any>) => {
+  const res = await FETCH.get<IProduct[]>(API_ROUTES.PRODUCT.GET_ALL_PRODUCTS, {
     cache: "reload",
     next: {
-      tags: [CACHE_KEY.PRODUCT.GET_PUBLISHED]
+      tags: [CACHE_KEY.PRODUCT.GET_ALL]
     },
     cookies,
     params: query
@@ -62,7 +62,6 @@ export const fetchPopularProducts = async () => {
     },
     cookies
   })
-  if (!res.success) redirect("/" + res.statusCode)
   return res
 }
 

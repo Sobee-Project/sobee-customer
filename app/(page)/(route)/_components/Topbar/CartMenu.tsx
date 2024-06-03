@@ -2,7 +2,7 @@
 import { APP_ROUTES } from "@/_constants"
 import { IOrderItem } from "@/_lib/interfaces"
 import { formatCurrency } from "@/_lib/utils"
-import { Button, Divider, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react"
+import { Badge, Button, Divider, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react"
 import { ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import React, { useMemo } from "react"
@@ -18,10 +18,12 @@ const CartMenu = ({ cart }: Props) => {
     <Popover showArrow placement='bottom-end'>
       <PopoverTrigger>
         <Button isIconOnly variant='light' className='hidden md:inline-flex'>
-          <ShoppingCart size={24} />
+          <Badge content={cart?.length || 0} color='danger'>
+            <ShoppingCart size={24} />
+          </Badge>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='block min-w-96 overflow-hidden p-0'>
+      <PopoverContent className='block w-[32rem] overflow-hidden p-0'>
         <div className='space-y-2'>
           <h2 className='p-4 text-xl font-semibold'>Shopping cart</h2>
           <div className='space-y-4 px-4'>

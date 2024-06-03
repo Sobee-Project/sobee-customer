@@ -8,6 +8,7 @@ export interface IBrand {
   isActive: boolean
   website: string
   products?: string[] | IProduct[]
+  productCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }

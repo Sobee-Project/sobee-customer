@@ -1,7 +1,20 @@
-import React from "react"
+import { fetchBrandAndProducts, fetchCategoryAndProducts } from "@/_actions"
+import { redirect } from "next/navigation"
+import BrandAndProductsList from "./_components/BrandAndProductsList"
 
-const page = () => {
-  return <div>page</div>
+const page = async () => {
+  const categoryAndProductsRes = await fetchBrandAndProducts()
+  if (!categoryAndProductsRes.success) {
+    redirect("/" + categoryAndProductsRes.statusCode)
+  }
+
+  const data = categoryAndProductsRes.data!
+
+  return (
+    <div className='space-y-4'>
+      <BrandAndProductsList initialData={data} paginationRes={{ ...categoryAndProductsRes }} />
+    </div>
+  )
 }
 
 export default page

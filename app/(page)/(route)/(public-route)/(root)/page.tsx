@@ -1,16 +1,29 @@
 import {
   fetchAllBrands,
   fetchAllCategories,
+  fetchAllProducts,
   fetchBestSellerProducts,
   fetchDiscountProducts,
   fetchFeaturedProducts,
   fetchPopularProducts,
-  fetchPublishedProducts,
   fetchTodayCoupons
 } from "@/_actions"
 import { IBrand, ICategory, ICoupon, IProduct } from "@/_lib/interfaces"
+import { Spinner } from "@nextui-org/react"
+import dynamic from "next/dynamic"
 import React from "react"
-import { BrandList, Campaign, CategoryList, ProductListWithLabel, TodayCoupons } from "./_components"
+import { ProductList } from "../../_components"
+import { Campaign, ProductListWithLabel, TodayCoupons } from "./_components"
+
+const CategoryList = dynamic(() => import("./_components/CategoryList"), {
+  loading: () => <Spinner />,
+  ssr: false
+})
+
+const BrandList = dynamic(() => import("./_components/BrandList"), {
+  loading: () => <Spinner />,
+  ssr: false
+})
 
 const page = async () => {
   let publishedProducts = [] as IProduct[]
@@ -22,7 +35,7 @@ const page = async () => {
   let brands = [] as IBrand[]
   let coupons = [] as ICoupon[]
 
-  const publishedProductsPromise = fetchPublishedProducts()
+  const publishedProductsPromise = fetchAllProducts()
   const popularProductsPromise = fetchPopularProducts()
   const featuredProductsPromise = fetchFeaturedProducts()
   const bestSellerProductsPromise = fetchBestSellerProducts()
@@ -72,10 +85,6 @@ const page = async () => {
     {
       label: "Featured Products",
       products: featuredProducts
-    },
-    {
-      label: "All Products",
-      products: publishedProducts
     }
   ]
 
@@ -91,6 +100,16 @@ const page = async () => {
             <ProductListWithLabel key={item.label} products={item.products} label={item.label} />
           ) : null
         )}
+        <div className='space-y-4'>
+          <h3 className='text-2xl font-semibold'>All products</h3>
+          {publishedProducts.length === 0 ? (
+            <div className='flex h-20'>
+              <p className='text-lg text-foreground-500'>No products found</p>
+            </div>
+          ) : (
+            <ProductList initialProducts={publishedProducts} paginationRes={publishedProductsRes} />
+          )}
+        </div>
       </div>
     </div>
   )
