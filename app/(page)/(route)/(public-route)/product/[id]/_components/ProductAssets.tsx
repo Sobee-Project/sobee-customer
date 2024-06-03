@@ -26,7 +26,7 @@ const ProductAssets = ({ assets }: Props) => {
         >
           {assets.map((asset) => (
             <SwiperSlide key={asset} className='grid w-full place-items-center'>
-              <Image src={asset} alt='Product image' width={400} height={400} className='w-full rounded' />
+              <Image src={asset} alt='Product image' width={400} height={400} className='w-full rounded bg-white' />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -68,7 +68,7 @@ const ProductAssets = ({ assets }: Props) => {
                 alt='Product image'
                 width={100}
                 height={100}
-                className='pointer-events-none w-full select-none object-contain'
+                className='pointer-events-none w-full select-none bg-white object-contain'
               />
             </div>
           ))}

@@ -14,7 +14,7 @@ const layout = async ({ children, params }: LayoutParamsProps) => {
   return (
     <div className='mx-auto px-4 py-10 md:mx-[5%]'>
       <div className='flex flex-col gap-8 md:flex-row'>
-        <aside className='hidden w-60 flex-col gap-4 self-start md:flex'>
+        <aside className='sticky top-24 hidden max-h-[90vh] w-60 flex-col justify-start gap-4 self-start overflow-auto md:flex'>
           <BrandLeftSide brands={brands} paginationRes={{ ...brandRes }} />
         </aside>
         <nav className='flex w-full md:hidden'>
