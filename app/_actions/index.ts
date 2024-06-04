@@ -22,6 +22,7 @@ export {
 } from "./payment-account-action"
 export { fetchPaymentMethods } from "./payment-method"
 export {
+  clearFavoriteProducts,
   fetchAllColors,
   fetchAllProducts,
   fetchBestSellerProducts,

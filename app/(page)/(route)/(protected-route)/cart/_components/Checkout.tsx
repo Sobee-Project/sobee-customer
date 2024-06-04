@@ -3,15 +3,16 @@ import { APP_ROUTES } from "@/_constants"
 import { EShippingType } from "@/_lib/enums"
 import { IOrderItem, IProduct, IShipping, ITax } from "@/_lib/interfaces"
 import { formatCurrency } from "@/_lib/utils"
+import { useCartStore } from "@/_store"
 import { Button, Divider } from "@nextui-org/react"
 import Link from "next/link"
 import React, { useMemo } from "react"
 
-type Props = {
-  cart: IOrderItem[]
-}
+type Props = {}
 
-const Checkout = ({ cart }: Props) => {
+const Checkout = ({}: Props) => {
+  const { orderItems: cart } = useCartStore()
+
   const subTotal = useMemo(() => cart.reduce((acc, item) => acc + (item.subTotal || 0), 0), [cart])
   const fee = useMemo(() => {
     let sf = 0
@@ -20,6 +21,7 @@ const Checkout = ({ cart }: Props) => {
       const product = item.product as IProduct
       const tax = product.tax as ITax
       const shippingFee = product.shippingFee as IShipping
+      if (!tax || !shippingFee) return
       sf += shippingFee.type === EShippingType.FIXED ? shippingFee.amount : shippingFee.amount * subTotal
       tf += tax.rate * subTotal
     })
@@ -29,7 +31,7 @@ const Checkout = ({ cart }: Props) => {
   const total = subTotal + fee.sf + fee.tf
 
   return (
-    <div className='space-y-8 self-start md:sticky md:top-28 md:min-w-72 lg:min-w-80'>
+    <div className='w-full space-y-8 self-start md:sticky md:top-28 md:max-w-72 lg:max-w-80'>
       <h3 className='text-lg font-semibold'>Order summary</h3>
       <div className='space-y-4'>
         <div className='flex items-center justify-between gap-2'>

@@ -1,16 +1,13 @@
+"use client"
 import { ProductCard } from "@/(page)/(route)/_components"
 import { fetchFavoriteProducts } from "@/_actions"
 import { IProduct } from "@/_lib/interfaces"
+import { useFavoriteStore } from "@/_store"
 import { Divider } from "@nextui-org/react"
-import React from "react"
+import React, { useEffect } from "react"
 
-const page = async () => {
-  let favoriteProducts = [] as IProduct[]
-  const favoriteProductsPromise = fetchFavoriteProducts()
-
-  const [favoriteProductsRes] = await Promise.all([favoriteProductsPromise])
-
-  if (favoriteProductsRes.success) favoriteProducts = favoriteProductsRes.data!
+const Page = () => {
+  const { favoriteProducts } = useFavoriteStore()
 
   return (
     <div>
@@ -33,4 +30,4 @@ const page = async () => {
   )
 }
 
-export default page
+export default Page

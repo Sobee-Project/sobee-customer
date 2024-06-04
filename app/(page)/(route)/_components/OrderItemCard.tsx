@@ -4,13 +4,15 @@ import { APP_ROUTES } from "@/_constants"
 import { IOrderItem, IProduct } from "@/_lib/interfaces"
 import { cn, formatCurrency } from "@/_lib/utils"
 import { productInitialState, productReducer } from "@/_reducer"
+import { useCartStore } from "@/_store"
 import { Button, Chip, Divider, Input } from "@nextui-org/react"
 import { Minus, Plus } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
 import Image from "next/image"
 import Link from "next/link"
-import React, { useCallback, useEffect, useReducer } from "react"
+import React, { useCallback, useEffect, useReducer, useState } from "react"
 import toast from "react-hot-toast"
+import { useDebounce, useDebouncedCallback } from "use-debounce"
 
 type Props = {
   orderItem: IOrderItem
@@ -21,6 +23,10 @@ const OrderItemCard = ({ orderItem, hideQuantity = false }: Props) => {
   const product = orderItem.product as IProduct
   const [{ quantity }, dispatch] = useReducer(productReducer, productInitialState)
 
+  const { updateOrderItemQuantity, removeOrderItem } = useCartStore()
+  const [isRemoving, setIsRemoving] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
+
   useEffect(() => {
     dispatch({
       type: "SET_QUANTITY",
@@ -28,45 +34,18 @@ const OrderItemCard = ({ orderItem, hideQuantity = false }: Props) => {
     })
   }, [orderItem])
 
-  const { execute: removeOrderItemExecute, status: removeOrderItemStatus } = useAction(removeOrderItem, {
-    onSuccess: ({ data }) => {
-      if (data.success) {
-        toast.success("Item removed from cart")
-      } else {
-        toast.error(data.message)
-      }
-    }
-  })
-
-  const { execute: updateOrderItemQuantityExecute, status: updateOrderItemStatus } = useAction(
-    updateOrderItemQuantity,
-    {
-      onSuccess: ({ data }) => {
-        if (data.success) {
-          toast.success("Quantity updated")
-        } else {
-          toast.error(data.message)
-        }
-      }
-    }
-  )
-
-  const isRemoving = removeOrderItemStatus === "executing"
-  const isUpdating = updateOrderItemStatus === "executing"
-
   const handleRemoveOrderItem = () => {
-    removeOrderItemExecute(orderItem._id!)
+    removeOrderItem(orderItem._id!)
   }
 
   const onChangeQuantity = useCallback(
     (q: number) => {
-      updateOrderItemQuantityExecute({
-        _id: orderItem._id!,
-        quantity: q
-      })
+      updateOrderItemQuantity(orderItem._id!, q)
     },
-    [orderItem._id, updateOrderItemQuantityExecute]
+    [orderItem._id, updateOrderItemQuantity]
   )
+
+  const debounceQuantity = useDebouncedCallback(onChangeQuantity, 500)
 
   return (
     <div className='flex gap-4'>
@@ -139,7 +118,7 @@ const OrderItemCard = ({ orderItem, hideQuantity = false }: Props) => {
                       type: "SET_QUANTITY",
                       payload: Number(v)
                     })
-                    onChangeQuantity(quantity)
+                    !isNaN(parseInt(v)) && debounceQuantity(parseInt(v))
                   }}
                   isDisabled={isUpdating || isRemoving}
                 />

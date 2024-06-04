@@ -9,17 +9,9 @@ const layout = async ({ children }: PropsWithChildren) => {
   const res = await getCurrentUser()
   const user = res.data?.user
 
-  let cart = [] as IOrderItem[]
-  if (user) {
-    const cartRes = await fetchOrderItems()
-    if (cartRes.success) {
-      cart = cartRes.data!
-    }
-  }
-
   return (
     <div className='min-h-screen'>
-      <Topbar user={user} cart={cart} />
+      <Topbar user={user} />
       <div className='min-h-[80vh]'>{children}</div>
       <Footer />
     </div>

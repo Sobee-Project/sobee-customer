@@ -34,6 +34,7 @@ const CartList = ({ cart }: Props) => {
       const product = item.product as IProduct
       const tax = product.tax as ITax
       const shippingFee = product.shippingFee as IShipping
+      if (!tax || !shippingFee) return
       sf += shippingFee.type === EShippingType.FIXED ? shippingFee.amount : shippingFee.amount * subTotal
       tf += tax.rate * subTotal
     })
@@ -80,6 +81,7 @@ const CartList = ({ cart }: Props) => {
   const isApplyingDiscount = applyDiscountStatus === "executing"
 
   const onApplyDiscount = useCallback(() => {
+    if (!discountCode) return toast.error("Please enter a discount code")
     applyDiscountExecute({
       code: discountCode,
       orderProducts: orderItems,

@@ -12,13 +12,13 @@ type Props = {
   products: IProduct[]
 } & IBrand
 
-const BrandAndProducts = ({ name, slug, products }: Props) => {
+const BrandAndProducts = ({ name, _id, products }: Props) => {
   return (
     <div className='w-full'>
       <div className='flex items-center justify-between'>
         <h3 className='text-2xl font-semibold'>{name}</h3>
         <Link
-          href={APP_ROUTES.CATEGORIES.ID.replace(":id", slug)}
+          href={APP_ROUTES.BRANDS.ID.replace(":id", _id!)}
           className='flex items-center text-primary hover:text-primary-400 hover:transition-colors'
         >
           <p>View all products</p>

@@ -120,21 +120,42 @@ export const fetchFavoriteProducts = async () => {
   return res
 }
 
-export const toggleFavorite = safeAction
-  .metadata({
-    actionName: "Toggle Favorite"
-  })
-  .schema(toggleFavoriteFormSchma)
-  .action(async ({ parsedInput }) => {
-    const res = await FETCH.put<any, IProduct>(
-      API_ROUTES.PRODUCT.TOGGLE_FAVORITE_PRODUCT.replace(":id", parsedInput),
-      undefined,
-      {
-        cookies
-      }
-    )
-    if (res.success) {
-      revalidateTag(CACHE_KEY.PRODUCT.GET_CUSTOMER_FAVORITE)
+// export const toggleFavorite = safeAction
+//   .metadata({
+//     actionName: "Toggle Favorite"
+//   })
+//   .schema(toggleFavoriteFormSchma)
+//   .action(async ({ parsedInput }) => {
+//     const res = await FETCH.put<any, IProduct>(
+//       API_ROUTES.PRODUCT.TOGGLE_FAVORITE_PRODUCT.replace(":id", parsedInput),
+//       undefined,
+//       {
+//         cookies
+//       }
+//     )
+//     if (res.success) {
+//       revalidateTag(CACHE_KEY.PRODUCT.GET_CUSTOMER_FAVORITE)
+//     }
+//     return res
+//   })
+
+export const toggleFavorite = async (productId: string) => {
+  const res = await FETCH.put<any, IProduct[]>(
+    API_ROUTES.PRODUCT.TOGGLE_FAVORITE_PRODUCT.replace(":id", productId),
+    undefined,
+    {
+      cookies
     }
-    return res
+  )
+  return res
+}
+
+export const clearFavoriteProducts = async () => {
+  const res = await FETCH.delete(API_ROUTES.PRODUCT.CLEAR_FAVORITE_PRODUCTS, {
+    cookies
   })
+  if (res.success) {
+    revalidateTag(CACHE_KEY.PRODUCT.GET_CUSTOMER_FAVORITE)
+  }
+  return res
+}

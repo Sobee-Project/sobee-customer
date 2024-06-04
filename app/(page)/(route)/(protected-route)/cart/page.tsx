@@ -6,19 +6,13 @@ import { redirect } from "next/navigation"
 import { CartList, Checkout } from "./_components"
 
 const layout = async ({ searchParams }: any) => {
-  let cart = [] as IOrderItem[]
-  const cartRes = await fetchOrderItems()
-  if (cartRes.success) {
-    cart = cartRes.data!
-  }
-
   return (
     <div className='mx-[5%] mt-8'>
       <h2 className='mb-12 text-3xl font-semibold'>Shopping cart</h2>
-      <div className='relative gap-8 md:flex'>
-        <CartList cart={cart} />
-        <Divider orientation='vertical' className='h-auto min-h-80' />
-        <Checkout cart={cart} />
+      <div className='relative flex flex-col gap-8 md:flex-row'>
+        <CartList />
+        <Divider orientation='vertical' className='hidden h-auto min-h-80 md:block' />
+        <Checkout />
       </div>
     </div>
   )

@@ -2,12 +2,12 @@
 import { invalidateCookies } from "@/_actions"
 import { Logo, ScreenLoader, ThemeSwitcher } from "@/_components"
 import { APP_ROUTES } from "@/_constants"
-import { IOrderItem, IUser } from "@/_lib/interfaces"
+import { IUser } from "@/_lib/interfaces"
 import { cn } from "@/_lib/utils"
+import { useCartStore, useFavoriteStore } from "@/_store"
 import { isNavActive } from "@/_utils"
 import { Badge, Button, Spinner } from "@nextui-org/react"
 import { Menu, ShoppingCart } from "lucide-react"
-import { useCookies } from "next-client-cookies"
 import { useAction } from "next-safe-action/hooks"
 import dynamic from "next/dynamic"
 import Link from "next/link"
@@ -32,20 +32,27 @@ const CartMenu = dynamic(() => import("./CartMenu"), {
 
 type Props = {
   user?: IUser
-  cart?: IOrderItem[]
 }
 
-const Topbar = ({ user, cart }: Props) => {
+const Topbar = ({ user }: Props) => {
   const pathname = usePathname()
 
   const [showMenu, setShowMenu] = useState(false)
 
   const { execute } = useAction(invalidateCookies)
+  const { orderItems: cart, loadOrderItems } = useCartStore()
+  const { loadFavoriteProducts } = useFavoriteStore()
 
   useEffect(() => {
     if (user) return
     execute()
   }, [execute, user])
+
+  useEffect(() => {
+    if (user) {
+      Promise.all([loadOrderItems(), loadFavoriteProducts()])
+    }
+  }, [loadFavoriteProducts, loadOrderItems, user])
 
   return (
     <div className='sticky top-0 z-50 flex items-center justify-between self-start bg-background p-4 shadow-sm dark:bg-gradient-to-br dark:from-slate-900 dark:to-black md:px-8'>
@@ -81,8 +88,8 @@ const Topbar = ({ user, cart }: Props) => {
           <ThemeSwitcher />
           {user && (
             <>
-              <CartMenu cart={cart || []} />
-              <Button isIconOnly variant='light' radius='full' className='md:hidden' as={Link} href={APP_ROUTES.CARTS}>
+              <CartMenu />
+              <Button isIconOnly variant='light' className='md:hidden' as={Link} href={APP_ROUTES.CARTS}>
                 <Badge content={cart?.length || 0} color='danger'>
                   <ShoppingCart size={24} />
                 </Badge>

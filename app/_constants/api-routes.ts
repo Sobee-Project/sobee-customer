@@ -25,8 +25,9 @@ export const API_ROUTES = {
     GET_FEATURED_PRODUCTS: "/product/featured",
     GET_PRODUCT: "/product/:id",
     GET_COLORS: "/product/color",
-    GET_CUSTOMER_FAVORITE_PRODUCTS: "/product/customer/favorite",
-    TOGGLE_FAVORITE_PRODUCT: "/product/:id/favorite"
+    GET_CUSTOMER_FAVORITE_PRODUCTS: "/favorite",
+    TOGGLE_FAVORITE_PRODUCT: "/favorite/:id/toggle",
+    CLEAR_FAVORITE_PRODUCTS: "/favorite/clear"
   },
 
   REVIEW: {

@@ -6,11 +6,12 @@ import { EProductType } from "@/_lib/enums"
 import { IProduct } from "@/_lib/interfaces"
 import { cn, formatCurrency } from "@/_lib/utils"
 import { productInitialState, productReducer } from "@/_reducer"
+import { useCartStore, useFavoriteStore } from "@/_store"
 import { Button, Input, Tooltip } from "@nextui-org/react"
 import { Heart, Minus, Plus, ShoppingBag } from "lucide-react"
 import { useCookies } from "next-client-cookies"
 import { useAction } from "next-safe-action/hooks"
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useOptimistic, useReducer, useState } from "react"
 import toast from "react-hot-toast"
 
 type Props = {
@@ -18,11 +19,25 @@ type Props = {
 }
 
 const ProductDetails = ({ product }: Props) => {
+  const { addOrderItem } = useCartStore()
+  const { isFavorite, toggleFavorite } = useFavoriteStore()
   const [{ quantity, selectedVariants }, dispatch] = useReducer(productReducer, productInitialState)
+  const [isLoading, setIsLoading] = useState(false)
 
   const cookies = useCookies()
   const userId = cookies.get(COOKIES_KEY.USER_ID_KEY)
-  const isFavoriteByUser = userId ? product.favoritesBy?.includes(userId) : false
+
+  const isFavoriteByUser = isFavorite(product._id!)
+  const [optimisticFavorite, toggleOptimisticFavorite] = useOptimistic(isFavoriteByUser, (state) => !state)
+
+  const _toggleFavorite = useCallback(async () => {
+    if (!userId) {
+      toast.error("Please login to add to favorite")
+      return
+    }
+    toggleOptimisticFavorite(isFavoriteByUser)
+    await toggleFavorite(product._id!)
+  }, [isFavoriteByUser, product._id, toggleFavorite, toggleOptimisticFavorite, userId])
 
   const optimizedVariants = useMemo(
     () => [
@@ -71,14 +86,6 @@ const ProductDetails = ({ product }: Props) => {
     return variant
   }, [product, selectedVariants])
 
-  const { execute } = useAction(toggleFavorite, {
-    onSuccess: ({ data }) => {
-      if (!data.success) {
-        toast.error(data.message)
-      }
-    }
-  })
-
   useEffect(() => {
     if (getViaSelectedVariants) {
       if (quantity > getViaSelectedVariants.amount) {
@@ -90,34 +97,23 @@ const ProductDetails = ({ product }: Props) => {
     }
   }, [getViaSelectedVariants, quantity])
 
-  const { status, execute: executeCreateOrderItem } = useAction(createOrderItem, {
-    onSuccess: ({ data }) => {
-      if (data.success) {
-        toast.success("Added to cart")
-        console.log(data)
-      } else {
-        toast.error(data.message)
-      }
-    }
-  })
-
-  const isLoading = status === "executing"
-
-  const onPressAddToCart = useCallback(() => {
+  const onPressAddToCart = useCallback(async () => {
+    setIsLoading(true)
     if (product.isVariation) {
-      executeCreateOrderItem({
+      await addOrderItem({
         product: product._id!,
         amount: quantity,
         color: selectedVariants.color,
         size: selectedVariants.size
       })
     } else {
-      executeCreateOrderItem({
+      await addOrderItem({
         product: product._id!,
         amount: quantity
       })
     }
-  }, [executeCreateOrderItem, product, selectedVariants, quantity])
+    setIsLoading(false)
+  }, [addOrderItem, product, selectedVariants, quantity])
 
   return (
     <>
@@ -140,7 +136,7 @@ const ProductDetails = ({ product }: Props) => {
               variant='light'
               size='lg'
               isIconOnly
-              onPress={() => execute(product._id!)}
+              onPress={_toggleFavorite}
             >
               <Heart
                 className={cn(

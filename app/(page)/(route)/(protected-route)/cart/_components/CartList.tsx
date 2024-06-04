@@ -1,14 +1,14 @@
 "use client"
 import { OrderItemCard } from "@/(page)/(route)/_components"
 import { IOrderItem } from "@/_lib/interfaces"
+import { useCartStore } from "@/_store"
 import { Divider } from "@nextui-org/react"
 import React from "react"
 
-type Props = {
-  cart: IOrderItem[]
-}
+type Props = {}
 
-const CartList = ({ cart }: Props) => {
+const CartList = ({}: Props) => {
+  const { orderItems: cart } = useCartStore()
   return (
     <div className='flex-1 space-y-4'>
       {cart.length > 0 ? (

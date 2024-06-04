@@ -3,6 +3,7 @@ import { createOrder } from "@/_actions"
 import { EPaymentMethod } from "@/_lib/enums"
 import { CreateOrderFormSchema, createOrderFormSchema } from "@/_lib/form-schema"
 import { IAddress, IOrderItem, IPaymentMethod, IUser } from "@/_lib/interfaces"
+import { useCartStore } from "@/_store"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Divider } from "@nextui-org/react"
 import { useAction } from "next-safe-action/hooks"
@@ -13,12 +14,12 @@ import { CheckoutCartList } from "."
 import CheckoutInfo from "./CheckoutInfo"
 
 type Props = {
-  cart: IOrderItem[]
   user: IUser
   addresses: IAddress[]
 }
 
-const CheckoutHandler = ({ addresses, cart, user }: Props) => {
+const CheckoutHandler = ({ addresses, user }: Props) => {
+  const { orderItems: cart } = useCartStore()
   const defaultAddress = addresses.find((address) => address.isDefault)
   const methods = useForm<CreateOrderFormSchema>({
     resolver: zodResolver(createOrderFormSchema),

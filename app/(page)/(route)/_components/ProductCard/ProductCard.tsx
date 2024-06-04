@@ -5,6 +5,7 @@ import { EProductType } from "@/_lib/enums"
 import { IBrand, ICategory, IVariant } from "@/_lib/interfaces"
 import { cn, formatCurrency } from "@/_lib/utils"
 import { productInitialState as productCardInitialState, productReducer as productCardReducer } from "@/_reducer"
+import { useCartStore, useFavoriteStore } from "@/_store"
 import {
   Avatar,
   Button,
@@ -23,12 +24,16 @@ import { useCookies } from "next-client-cookies"
 import { useAction } from "next-safe-action/hooks"
 import Image from "next/image"
 import Link from "next/link"
-import { useCallback, useMemo, useReducer } from "react"
+import { useCallback, useMemo, useOptimistic, useReducer, useState } from "react"
 import toast from "react-hot-toast"
 import RatingStars from "../RatingStarts"
 import { ProductCardProps } from "./ProductCard.type"
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  const { addOrderItem, isInCart } = useCartStore()
+  const { isFavorite, toggleFavorite } = useFavoriteStore()
+  const [isLoading, setIsLoading] = useState(false)
+
   const variants = product.variants as IVariant[]
   const brand = product.brand ? (product.brand as IBrand) : null
   const category = product.category as ICategory
@@ -37,28 +42,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const [{ quantity, selectedVariants }, dispatch] = useReducer(productCardReducer, productCardInitialState)
 
-  const isFavoriteByUser = userId ? product.favoritesBy?.includes(userId) : false
+  const isFavoriteByUser = isFavorite(product._id!)
+  const [optimisticFavorite, toggleOptimisticFavorite] = useOptimistic(isFavoriteByUser, (state) => !state)
 
-  const { execute: executeToggleFavorite } = useAction(toggleFavorite, {
-    onSuccess: ({ data }) => {
-      if (!data.success) {
-        toast.error(data.message)
-      }
+  const isProductInCart = isInCart(product._id!)
+
+  const _toggleFavorite = useCallback(async () => {
+    if (!userId) {
+      toast.error("Please login to add to favorite")
+      return
     }
-  })
-
-  const { status, execute: executeCreateOrderItem } = useAction(createOrderItem, {
-    onSuccess: ({ data }) => {
-      if (data.success) {
-        toast.success("Added to cart")
-        console.log(data)
-      } else {
-        toast.error(data.message)
-      }
-    }
-  })
-
-  const isLoading = status === "executing"
+    toggleOptimisticFavorite(isFavoriteByUser)
+    await toggleFavorite(product._id!)
+  }, [isFavoriteByUser, product._id, toggleFavorite, toggleOptimisticFavorite, userId])
 
   const optimizedData = useMemo(
     () => [
@@ -107,24 +103,26 @@ const ProductCard = ({ product }: ProductCardProps) => {
       .join(" - ")
   }, [product.displayPrice, product.maxPrice, product.minPrice, product.type, quantity])
 
-  const onPressAddToCart = useCallback(() => {
+  const onPressAddToCart = useCallback(async () => {
+    setIsLoading(true)
     if (product.isVariation) {
-      executeCreateOrderItem({
+      await addOrderItem({
         product: product._id!,
         amount: quantity,
         color: selectedVariants.color,
         size: selectedVariants.size
       })
     } else {
-      executeCreateOrderItem({
+      await addOrderItem({
         product: product._id!,
         amount: quantity
       })
     }
-  }, [executeCreateOrderItem, product, selectedVariants, quantity])
+    setIsLoading(false)
+  }, [addOrderItem, product, selectedVariants, quantity])
 
   return (
-    <Card className='h-full min-w-60 max-w-96 transition-transform hover:scale-[1.008]' shadow='sm'>
+    <Card className='h-full min-w-60 transition-transform hover:scale-[1.008]' shadow='sm'>
       <CardHeader className='relative'>
         {product.isDiscount && (
           <Chip className='absolute right-0 top-0 z-[2]' radius='md' color='danger' size='lg'>
@@ -138,13 +136,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
             variant='light'
             size='lg'
             isIconOnly
-            onPress={() => executeToggleFavorite(product._id!)}
+            onPress={_toggleFavorite}
           >
             <Heart
               size={20}
               className={cn(
                 "group-hover:fill-danger-400 group-hover:stroke-danger-400",
-                isFavoriteByUser ? "fill-danger-400 stroke-danger-400" : "fill-none stroke-current"
+                optimisticFavorite ? "fill-danger-400 stroke-danger-400" : "fill-none stroke-current"
               )}
             />
           </Button>
@@ -171,7 +169,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             href={APP_ROUTES.CATEGORIES.ID.replace(":id", category._id!)}
             className='w-fit text-slate-400 transition-colors hover:text-slate-200'
           >
-            {category.name}
+            #{category.name}
           </Link>
           {brand && (
             <Link
