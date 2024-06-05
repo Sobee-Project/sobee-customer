@@ -47,7 +47,7 @@ const CartList = ({ cart }: Props) => {
       const appliedDiscountType = appliedDiscount.type
       temp =
         appliedDiscountType === ECouponType.PERCENTAGE
-          ? subTotal * appliedDiscount.discountValue
+          ? (subTotal * appliedDiscount.discountValue) / 100
           : appliedDiscount.discountValue
     }
     return temp
@@ -84,10 +84,10 @@ const CartList = ({ cart }: Props) => {
     if (!discountCode) return toast.error("Please enter a discount code")
     applyDiscountExecute({
       code: discountCode,
-      orderProducts: orderItems,
+      orderProducts: cart.map((item) => (item.product as IProduct)._id!),
       orderValue: total
     })
-  }, [discountCode, applyDiscountExecute, orderItems, total])
+  }, [discountCode, applyDiscountExecute, cart, total])
 
   return (
     <div className='space-y-4 md:max-w-[30rem]'>
