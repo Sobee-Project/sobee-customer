@@ -14,14 +14,18 @@ type Props = {
 
 const BrandList = ({ brands }: Props) => {
   return (
-    <div className='space-y-4'>
+    <div className=' space-y-10 pt-20'>
       <div className='flex items-center justify-between'>
-        <h3 className='text-2xl font-semibold'>Brands</h3>
+        <h2 className='text-3xl font-semibold md:text-4xl'>
+          Choose your favorite brands
+          <span className=''>{`. `}</span>
+          <span className='text-neutral-500 dark:text-neutral-400'>What&apos;s trending now</span>
+        </h2>
         <Link
           href={APP_ROUTES.BRANDS.INDEX}
           className='flex items-center text-primary hover:text-primary-400 hover:transition-colors'
         >
-          <p>View all brands</p>
+          <p>View all</p>
           <ChevronRight size={20} />
         </Link>
       </div>

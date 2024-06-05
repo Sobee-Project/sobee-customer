@@ -22,7 +22,7 @@ const ProductList = ({ initialProducts, searchParams, paginationRes: pagination 
     setPaginationRes(pagination)
   }, [initialProducts, pagination])
 
-  console.log({ paginationRes })
+  // console.log({ paginationRes })
 
   const fetchMore = useCallback(async () => {
     if (!isFetching) {

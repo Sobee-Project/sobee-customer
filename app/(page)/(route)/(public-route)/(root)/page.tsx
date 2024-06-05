@@ -13,7 +13,15 @@ import { Spinner } from "@nextui-org/react"
 import dynamic from "next/dynamic"
 import React from "react"
 import { ProductList } from "../../_components"
-import { Campaign, ProductListWithLabel, TodayCoupons } from "./_components"
+import {
+  Campaign,
+  ProductListWithLabel,
+  SectionClientSay,
+  SectionHero,
+  SectionHowItWork,
+  SectionPromo,
+  TodayCoupons
+} from "./_components"
 
 const CategoryList = dynamic(() => import("./_components/CategoryList"), {
   loading: () => <Spinner />,
@@ -89,11 +97,15 @@ const page = async () => {
   ]
 
   return (
-    <div>
-      <Campaign />
+    <div className='mb-24 lg:mb-32'>
+      <SectionHero />
+      {/* <Campaign /> */}
       <div className='mx-[5%] my-4 space-y-4 md:mx-[10%]'>
         {categories.length > 0 && <CategoryList categories={categories} />}
         {brands.length > 0 && <BrandList brands={brands} />}
+        <div className='border-y border-slate-200 py-24 dark:border-slate-700 lg:py-32'>
+          <SectionHowItWork />
+        </div>
         {coupons.length > 0 && <TodayCoupons coupons={coupons} />}
         {listProductsWithLabel.map((item) =>
           item.products.length > 0 ? (
@@ -111,6 +123,10 @@ const page = async () => {
           )}
         </div>
       </div>
+      <div className='container'>
+        <SectionPromo />
+      </div>
+      <SectionClientSay />
     </div>
   )
 }

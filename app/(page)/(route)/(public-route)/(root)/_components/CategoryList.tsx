@@ -14,14 +14,18 @@ type Props = {
 
 const CategoryList = ({ categories }: Props) => {
   return (
-    <div className='space-y-4'>
+    <div className='space-y-10 pt-20'>
       <div className='flex items-center justify-between'>
-        <h3 className='text-2xl font-semibold'>Categories</h3>
+        <h2 className='text-3xl font-semibold md:text-4xl'>
+          Discover more categories
+          <span className=''>{`. `}</span>
+          <span className='text-neutral-500 dark:text-neutral-400'>Good things are waiting for you</span>
+        </h2>
         <Link
           href={APP_ROUTES.CATEGORIES.INDEX}
           className='flex items-center text-primary hover:text-primary-400 hover:transition-colors'
         >
-          <p>View all categories</p>
+          <p>View all</p>
           <ChevronRight size={20} />
         </Link>
       </div>
