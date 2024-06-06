@@ -1,21 +1,56 @@
 "use client"
 import { ReviewCard } from "@/(page)/(route)/_components"
-import { IReview, IUser } from "@/_lib/interfaces"
-import { Select, SelectItem } from "@nextui-org/react"
-import React, { useEffect } from "react"
+import { fetchProductReviews } from "@/_actions"
+import { IPaginate, IReview, IUser } from "@/_lib/interfaces"
+import { Button, Select, SelectItem, Spinner } from "@nextui-org/react"
+import React, { useCallback, useEffect } from "react"
 
 type Props = {
   reviews: IReview[]
+  paginationRes: IPaginate
+  productId: string
 }
 
-const ProductReviews = ({ reviews }: Props) => {
-  const [selectedRating, setSelectedRating] = React.useState<string>("0")
-
-  const [filteredReviews, setFilteredReviews] = React.useState<IReview[]>(reviews)
+const ProductReviews = ({ reviews: initialReviews, paginationRes: pagination, productId }: Props) => {
+  const [reviews, setReviews] = React.useState<IReview[]>(initialReviews)
+  const [paginationRes, setPaginationRes] = React.useState<IPaginate>(pagination)
+  const [isFetching, setIsFetching] = React.useState(false)
+  const [selectedRating, setSelectedRating] = React.useState<number | null>(null)
 
   useEffect(() => {
-    setFilteredReviews(reviews.filter((review) => selectedRating === "0" || review.rating === Number(selectedRating)))
-  }, [reviews])
+    setReviews(initialReviews)
+    setPaginationRes(pagination)
+  }, [initialReviews, pagination])
+
+  const onFilterChange = async (rating: number | null) => {
+    if (!isFetching) {
+      setIsFetching(true)
+      const res = await fetchProductReviews(productId, {
+        page: paginationRes.nextPage,
+        rating
+      })
+      if (res.success) {
+        setReviews((prev) => res.data!)
+        setPaginationRes(res)
+      }
+      setIsFetching(false)
+    }
+  }
+
+  const fetchMore = useCallback(async () => {
+    if (!isFetching) {
+      setIsFetching(true)
+      const res = await fetchProductReviews(productId, {
+        page: paginationRes.nextPage,
+        rating: selectedRating
+      })
+      if (res.success) {
+        setReviews((prev) => [...prev, ...res.data!])
+        setPaginationRes(res)
+      }
+      setIsFetching(false)
+    }
+  }, [isFetching, productId, paginationRes.nextPage, selectedRating])
 
   const avgRating = reviews.reduce((acc, review) => acc + review.rating, 0) / (reviews.length || 1)
 
@@ -29,10 +64,12 @@ const ProductReviews = ({ reviews }: Props) => {
           size='sm'
           label='Filter by'
           disallowEmptySelection
-          selectedKeys={[selectedRating]}
-          onChange={(e) => {
-            console.log(e.target.value)
-            setSelectedRating(e.target.value)
+          selectedKeys={[selectedRating ? String(selectedRating) : "0"]}
+          onChange={async (e) => {
+            const r = e.target.value
+            const val = r === "0" ? null : Number(r)
+            await onFilterChange(val)
+            setSelectedRating(val)
           }}
           className='w-1/4'
         >
@@ -52,36 +89,25 @@ const ProductReviews = ({ reviews }: Props) => {
           }
         </Select>
       </div>
-      {/* {reviews.length === 0 ? (
+      {reviews.length === 0 ? (
         <p>No reviews yet</p>
       ) : (
-        reviews.map((review) => (
-          <div key={review._id} className='mb-4'>
-            <h3 className='font-semibold'>{review.title}</h3>
-          </div>
-        ))
-      )} */}
-      <div className='space-y-4'>
-        {[0, 1, 2, 3, 4].map((i) => (
-          <ReviewCard
-            key={i}
-            review={{
-              _id: "1",
-              assets: [
-                "https://res.cloudinary.com/dtfkou1of/image/upload/v1716173396/sobee-storage/image/product/asset/qz47lxybfv9qy46q6s72.jpg",
-                "https://res.cloudinary.com/dtfkou1of/image/upload/v1716142861/sobee-storage/image/product/asset/p5uctian61lykr7btyep.jpg"
-              ],
-              content: "This is a review",
-              rating: 5,
-              createdAt: new Date().toUTCString(),
-              customer: {
-                avatar: "",
-                name: "John Doe"
-              } as IUser
-            }}
-          />
-        ))}
-      </div>
+        <div className='space-y-4'>
+          {reviews.map((review) => (
+            <ReviewCard key={review._id} review={review} />
+          ))}
+        </div>
+      )}
+
+      {isFetching && <Spinner />}
+
+      {paginationRes.hasNext && (
+        <div className='flex justify-center'>
+          <Button onClick={() => fetchMore()} className='mt-4 self-center' isLoading={isFetching} disabled={isFetching}>
+            Load more
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

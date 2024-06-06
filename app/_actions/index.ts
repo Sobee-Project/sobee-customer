@@ -45,7 +45,7 @@ export {
   likeQuestion,
   likeQuestionReply
 } from "./question-action"
-export { createReview, fetchProductReviews, fetchUserReviews } from "./review-action"
+export { createReview, fetchProductReviews, fetchUserReviews, getReview, updateReview } from "./review-action"
 export { fetchAllTerms } from "./term-action"
 export { changeAvatar, updateUser } from "./user-action"
 export { invalidateCookies, revalidateTagAction } from "./utils-action"

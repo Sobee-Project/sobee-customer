@@ -71,7 +71,7 @@ const CategoryList = ({ categories }: Props) => {
       >
         {/* <div className='grid grid-cols-2 gap-4 md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]'> */}
         {categories.map((category) => (
-          <SwiperSlide key={category._id}>
+          <SwiperSlide key={category._id} className='pb-10'>
             <CategoryCard category={category} key={category._id} />
           </SwiperSlide>
         ))}

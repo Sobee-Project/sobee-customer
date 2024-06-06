@@ -35,11 +35,11 @@ const CartList = ({ cart }: Props) => {
       const tax = product.tax as ITax
       const shippingFee = product.shippingFee as IShipping
       if (!tax || !shippingFee) return
-      sf += shippingFee.type === EShippingType.FIXED ? shippingFee.amount : (shippingFee.amount * subTotal) / 100
-      tf += (tax.rate * subTotal) / 100
+      sf += shippingFee.type === EShippingType.FIXED ? shippingFee.amount : (shippingFee.amount * item.subTotal!) / 100
+      tf += (tax.rate * item.subTotal!) / 100
     })
     return { sf, tf }
-  }, [cart, subTotal])
+  }, [cart])
 
   const discountTotal = useMemo(() => {
     let temp = 0

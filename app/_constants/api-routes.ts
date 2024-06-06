@@ -35,7 +35,10 @@ export const API_ROUTES = {
     GET_USER_REVIEWS: "/review/user/:id",
     CREATE_REVIEW: "/review",
     UPDATE_REVIEW: "/review/:id",
-    DELETE_REVIEW: "/review/:id"
+    DELETE_REVIEW: "/review/:id",
+    LIKE_REVIEW: "/review/:id/like",
+    LIKE_REVIEW_REPLY: "/review/:id/like-reply",
+    GET_REVIEW: "/review/customer/product/:id"
   },
   CATEGORY: {
     GET_CATEGORIES: "/category",

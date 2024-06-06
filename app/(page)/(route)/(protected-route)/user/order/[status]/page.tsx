@@ -1,7 +1,4 @@
-import { fetchAllOrders } from "@/_actions"
-import { redirect } from "next/navigation"
-import React from "react"
-import OrderList from "./_components/OrderList"
+import { OrderList } from "@/(page)/(route)/_components/Order"
 
 const page = async () => {
   return (

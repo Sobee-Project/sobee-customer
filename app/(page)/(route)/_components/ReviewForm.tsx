@@ -1,6 +1,6 @@
 "use client"
 import RatingStars from "@/(page)/(route)/_components/RatingStarts"
-import { createReview } from "@/_actions"
+import { createReview, updateReview } from "@/_actions"
 import {
   CreateReviewFormSchema,
   EditReviewFormSchema,
@@ -63,7 +63,7 @@ const ReviewForm = ({ type = "new", data, visible, onClose }: Props) => {
   })
   const [showCloudinary, setShowCloudinary] = useState(false)
 
-  const { execute: executeCreateReview, isExecuting: isCreating } = useAction(createReview, {
+  const { execute, isExecuting } = useAction(isEdit ? updateReview : createReview, {
     onSuccess: ({ data }) => {
       if (data.success) {
         toast.success("Review created successfully")
@@ -75,7 +75,7 @@ const ReviewForm = ({ type = "new", data, visible, onClose }: Props) => {
   })
 
   const onSubmit = (data: CreateReviewFormSchema | EditReviewFormSchema) => {
-    isEdit ? console.log("Edit review", data) : executeCreateReview(data)
+    execute(data)
   }
 
   return (
@@ -149,12 +149,12 @@ const ReviewForm = ({ type = "new", data, visible, onClose }: Props) => {
                 onClick={handleSubmit(onSubmit)}
                 type='submit'
                 color='primary'
-                isLoading={isCreating}
-                disabled={isCreating}
+                isLoading={isExecuting}
+                disabled={isExecuting}
               >
                 {type === "new" ? "Submit" : "Save"}
               </Button>
-              <Button onClick={onClose} type='button' isLoading={isCreating} disabled={isCreating} variant='light'>
+              <Button onClick={onClose} type='button' isLoading={isExecuting} disabled={isExecuting} variant='light'>
                 Cancel
               </Button>
             </ModalFooter>

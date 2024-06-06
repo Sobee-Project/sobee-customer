@@ -79,7 +79,7 @@ const page = async ({ params }: any) => {
         <ProductDetails product={product} />
       </div>
       <Divider />
-      <ProductReviews reviews={reviews} />
+      <ProductReviews reviews={reviews} paginationRes={reviewsRes} productId={params.id} />
       <Divider />
       <ProductQuestions questions={questions} />
       <Divider />

@@ -1,28 +1,16 @@
 "use client"
-import { cancelOrder } from "@/_actions"
+import { cancelOrder, getReview } from "@/_actions"
 import { ScreenLoader } from "@/_components"
 import { EOrderStatus } from "@/_lib/enums"
-import { IOrder, IOrderItem, IProduct } from "@/_lib/interfaces"
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Select,
-  SelectItem,
-  Spinner
-} from "@nextui-org/react"
+import { IOrder, IOrderItem, IProduct, IReview } from "@/_lib/interfaces"
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react"
 import { Download, Star, X } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
 import dynamic from "next/dynamic"
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
-import { Resolution, usePDF } from "react-to-pdf"
+import { usePDF } from "react-to-pdf"
 import Invoice from "./Invoice"
 
 const ReviewForm = dynamic(() => import("@/(page)/(route)/_components/ReviewForm"), {
@@ -45,6 +33,14 @@ const OrderItemList = ({ order }: Props) => {
   })
 
   const [showReviewForm, setShowReviewForm] = useState<null | string>(null)
+  const [reviewData, setReviewData] = useState<null | IReview>(null)
+
+  const fetchReview = async (productId: string) => {
+    const data = await getReview(productId)
+    if (data.success) {
+      setReviewData(data.data!)
+    }
+  }
 
   const { execute, isExecuting } = useAction(cancelOrder, {
     onSuccess: ({ data }) => {
@@ -79,8 +75,9 @@ const OrderItemList = ({ order }: Props) => {
                 return (
                   <DropdownItem
                     key={item._id}
-                    onPress={() => {
-                      setShowReviewForm(item._id!)
+                    onPress={async () => {
+                      await fetchReview(product._id!)
+                      setShowReviewForm(product._id!)
                     }}
                   >
                     <div className='flex items-center gap-2'>
@@ -119,12 +116,15 @@ const OrderItemList = ({ order }: Props) => {
         <ReviewForm
           visible={!!showReviewForm}
           onClose={() => setShowReviewForm(null)}
-          data={{
-            product: showReviewForm!,
-            rating: 0,
-            assets: [],
-            content: ""
-          }}
+          type={reviewData ? "edit" : "new"}
+          data={
+            reviewData || {
+              product: showReviewForm!,
+              rating: 0,
+              assets: [],
+              content: ""
+            }
+          }
         />
       )}
       <Invoice order={order} ref={targetRef} />
