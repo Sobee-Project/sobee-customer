@@ -10,6 +10,7 @@ interface CartStore {
   addOrderItem: (orderItem: IOrderItem) => Promise<void>
   removeOrderItem: (orderItemId: string) => Promise<void>
   updateOrderItemQuantity: (orderItemId: string, quantity: number) => Promise<void>
+  clearCart: () => void
 }
 
 export const useCartStore = create<CartStore>((set, get) => ({
@@ -69,5 +70,6 @@ export const useCartStore = create<CartStore>((set, get) => ({
     } else {
       toast.error(res.message)
     }
-  }
+  },
+  clearCart: () => set({ orderItems: [] })
 }))

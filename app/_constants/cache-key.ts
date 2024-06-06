@@ -62,5 +62,8 @@ export const CACHE_KEY = {
   },
   PAYMENT_METHODS: {
     GET_ALL: "PAYMENT_METHODS_GET_ALL"
+  },
+  REFUND_POLICY: {
+    GET_ALL: "REFUND_POLICY_GET_ALL"
   }
 }

@@ -49,13 +49,13 @@ const OrderItemCard = ({ orderItem, hideQuantity = false }: Props) => {
 
   return (
     <div className='flex gap-4'>
-      <div className='grid w-24 place-items-center overflow-hidden rounded-lg border'>
+      <div className='grid w-24 place-items-center overflow-hidden rounded-lg border bg-white'>
         <Image
           src={product.thumbnail || ""}
           alt={product.name}
           width={100}
           height={100}
-          className='w-full object-contain'
+          className='w-full bg-white object-contain'
         />
       </div>
       <div className='flex-1'>

@@ -63,10 +63,9 @@ const SectionHero = ({}: Props) => {
           draggable: true,
           hide: true
         }}
-        onSlideChange={(swiper) => setCurrentSlideIndex(swiper.activeIndex)}
+        onSlideChange={(swiper) => setCurrentSlideIndex(swiper.realIndex)}
         modules={[Scrollbar, Autoplay]}
         className='relative size-full'
-        lazyPreloadPrevNext={1}
       >
         {BannerList.map((item, index) => (
           <SwiperSlide key={index}>
@@ -83,20 +82,20 @@ const SectionHero = ({}: Props) => {
               <div className='container relative pb-0 pt-14 sm:pt-20 lg:py-44 xl:h-full'>
                 <motion.div
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  animate={{ opacity: currentSlideIndex === index ? 1 : 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className={`relative z-[1] w-full max-w-3xl space-y-8 sm:space-y-14`}
                 >
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    animate={{ opacity: currentSlideIndex === index ? 1 : 0, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
                     className='space-y-5 sm:space-y-6'
                   >
                     <span className='block text-base font-medium text-slate-700 md:text-xl'>{item.subHeading}</span>
                     <motion.h2
                       initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      animate={{ opacity: currentSlideIndex === index ? 1 : 0, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.6 }}
                       className=' text-3xl font-semibold !leading-[114%] text-slate-900 sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl'
                     >
@@ -105,17 +104,25 @@ const SectionHero = ({}: Props) => {
                   </motion.div>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    animate={{ opacity: currentSlideIndex === index ? 1 : 0, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.8 }}
                   >
-                    <Button as={Link} size='lg' endContent={<Search />} href={item.btnLink}>
+                    <Button
+                      as={Link}
+                      size='lg'
+                      variant='solid'
+                      color='primary'
+                      endContent={<Search />}
+                      href={item.btnLink}
+                      radius='full'
+                    >
                       {item.btnText}
                     </Button>
                   </motion.div>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  animate={{ opacity: currentSlideIndex === index ? 1 : 0, x: 0 }}
                   transition={{ duration: 0.5, delay: 1 }}
                   className='inset-y-0 end-0 w-full max-w-2xl pt-10 lg:absolute lg:mt-0 xl:max-w-3xl 2xl:max-w-4xl '
                 >

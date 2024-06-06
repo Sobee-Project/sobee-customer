@@ -1,5 +1,6 @@
 "use server"
 import { API_ROUTES, CACHE_KEY } from "@/_constants"
+import { CreateReviewFormSchema, createReviewformSchema } from "@/_lib/form-schema"
 import { IReview } from "@/_lib/interfaces"
 import { FETCH } from "@/_services"
 import { safeAction } from "@/_utils"
@@ -27,3 +28,16 @@ export const fetchUserReviews = async () => {
   })
   return res
 }
+
+export const createReview = safeAction
+  .metadata({
+    actionName: "Create Review"
+  })
+  .schema(createReviewformSchema)
+  .action(async ({ parsedInput }) => {
+    const res = await FETCH.post<CreateReviewFormSchema>(API_ROUTES.REVIEW.CREATE_REVIEW, parsedInput, {
+      cookies
+    })
+
+    return res
+  })

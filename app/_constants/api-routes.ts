@@ -93,15 +93,19 @@ export const API_ROUTES = {
   },
   ORDER: {
     CREATE: "/order",
-    GET_ORDERS: "/order",
+    GET_ORDERS: "/order/customer",
     GET_ORDER: "/order/:id",
     ADD_ORDER_ITEM: "/order/item",
     UPDATE_ORDER_ITEM_QUANTITY: "/order/item/:id/quantity",
     DELETE_ORDER_ITEM: "/order/item/:id",
     CANCEL_ORDER: "/order/:id/cancel",
-    GET_ORDER_ITEMS: "/order/item"
+    GET_ORDER_ITEMS: "/order/item",
+    CANCLE_ORDER: "/order/:id/status/cancel"
   },
   PAYMENT_METHODS: {
     GET_PAYMENT_METHODS: "/payment-method"
+  },
+  REFUND_POLICY: {
+    GET_ALL: "/refund-policy"
   }
 }

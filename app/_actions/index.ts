@@ -7,9 +7,11 @@ export { uploadFile, uploadUrl } from "./cloudinary-action"
 export { applyCoupon, fetchAllCoupons, fetchTodayCoupons } from "./coupon-action"
 export { fetchAllFaqs } from "./faq-action"
 export {
+  cancelOrder,
   createOrder,
   createOrderItem,
   fetchAllOrders,
+  fetchOrderById,
   fetchOrderItems,
   removeOrderItem,
   updateOrderItemQuantity
@@ -43,7 +45,7 @@ export {
   likeQuestion,
   likeQuestionReply
 } from "./question-action"
-export { fetchProductReviews, fetchUserReviews } from "./review-action"
+export { createReview, fetchProductReviews, fetchUserReviews } from "./review-action"
 export { fetchAllTerms } from "./term-action"
 export { changeAvatar, updateUser } from "./user-action"
 export { invalidateCookies, revalidateTagAction } from "./utils-action"

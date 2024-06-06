@@ -28,6 +28,7 @@ const SectionPromo = () => {
                   base: "bg-purple-100 text-purple-800",
                   content: "bg-purple-100 text-purple-800"
                 }}
+                className='min-w-10'
               >
                 01
               </Chip>
@@ -39,6 +40,7 @@ const SectionPromo = () => {
                   base: "bg-pink-100 text-pink-800",
                   content: "bg-pink-100 text-pink-800"
                 }}
+                className='min-w-10'
               >
                 02
               </Chip>
@@ -50,6 +52,7 @@ const SectionPromo = () => {
                   base: "bg-red-100 text-red-800",
                   content: "bg-red-100 text-red-800"
                 }}
+                className='min-w-10'
               >
                 03
               </Chip>
@@ -60,9 +63,10 @@ const SectionPromo = () => {
             <Input
               placeholder='Enter your email'
               type='email'
+              size='lg'
               endContent={
                 <Button isIconOnly radius='full' className='bg-slate-900 hover:bg-slate-800' variant='bordered'>
-                  <MoveRight className='text-white' />
+                  <MoveRight className='text-white' size={20} />
                 </Button>
               }
             />

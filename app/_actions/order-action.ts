@@ -1,5 +1,6 @@
 "use server"
 import { API_ROUTES, CACHE_KEY } from "@/_constants"
+import { EOrderStatus } from "@/_lib/enums"
 import {
   CreateOrderFormSchema,
   CreateOrderItemFormSchema,
@@ -14,28 +15,13 @@ import { FETCH } from "@/_services"
 import { safeAction } from "@/_utils"
 import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
+import { z } from "zod"
 
 export const createOrderItem = async (orderItem: IOrderItem) => {
   return await FETCH.post<IOrderItem, IOrderItem>(API_ROUTES.ORDER.ADD_ORDER_ITEM, orderItem, {
     cookies
   })
 }
-
-// export const createOrderItem = safeAction
-//   .metadata({
-//     actionName: "Create Order Item"
-//   })
-//   .schema(createOrderItemFormSchema)
-//   .action(async ({ parsedInput }) => {
-//     const res = await FETCH.post<CreateOrderItemFormSchema, IOrderItem>(API_ROUTES.ORDER.ADD_ORDER_ITEM, parsedInput, {
-//       cookies
-//     })
-
-//     if (res.success) {
-//       revalidateTag(CACHE_KEY.ORDER_ITEM.GET_ALL)
-//     }
-//     return res
-//   })
 
 export const fetchOrderItems = async () => {
   return await FETCH.get<IOrderItem[]>(API_ROUTES.ORDER.GET_ORDER_ITEMS, {
@@ -52,45 +38,6 @@ export const removeOrderItem = async (orderItemId: string) => {
     cookies
   })
 }
-
-// export const removeOrderItem = safeAction
-//   .metadata({
-//     actionName: "Remove Order Item"
-//   })
-//   .schema(removeOrderItemFormSchema)
-//   .action(async ({ parsedInput }) => {
-//     const res = await FETCH.delete<IOrderItem>(API_ROUTES.ORDER.DELETE_ORDER_ITEM.replace(":id", parsedInput), {
-//       cookies
-//     })
-
-//     if (res.success) {
-//       revalidateTag(CACHE_KEY.ORDER_ITEM.GET_ALL)
-//     }
-
-//     console.log(res)
-//     return res
-//   })
-
-// export const updateOrderItemQuantity = safeAction
-//   .metadata({
-//     actionName: "Update Order Item Quantity"
-//   })
-//   .schema(updateOrderItemQuantityFormSchema)
-//   .action(async ({ parsedInput }) => {
-//     const res = await FETCH.put<UpdateOrderItemQuantityFormSchema, IOrderItem>(
-//       API_ROUTES.ORDER.UPDATE_ORDER_ITEM_QUANTITY.replace(":id", parsedInput._id),
-//       parsedInput,
-//       {
-//         cookies
-//       }
-//     )
-
-//     if (res.success) {
-//       revalidateTag(CACHE_KEY.ORDER_ITEM.GET_ALL)
-//     }
-
-//     return res
-//   })
 
 export const updateOrderItemQuantity = async (id: string, quantity: number) => {
   return await FETCH.put<UpdateOrderItemQuantityFormSchema, IOrderItem>(
@@ -122,12 +69,40 @@ export const createOrder = safeAction
     return res
   })
 
-export const fetchAllOrders = async () => {
+export const fetchAllOrders = async (query?: any) => {
   return await FETCH.get<IOrder[]>(API_ROUTES.ORDER.GET_ORDERS, {
     cookies,
     cache: "reload",
     next: {
       tags: [CACHE_KEY.ORDER.GET_ALL]
-    }
+    },
+    params: query
   })
 }
+
+export const fetchOrderById = async (id: string) => {
+  const res = await FETCH.get<IOrder>(API_ROUTES.ORDER.GET_ORDER.replace(":id", id), {
+    cache: "reload",
+    next: {
+      tags: [[CACHE_KEY.ORDER.GET_BY_ID, id].join(",")]
+    },
+    cookies
+  })
+  return res
+}
+
+export const cancelOrder = safeAction
+  .metadata({
+    actionName: "Cancel Order"
+  })
+  .schema(z.string())
+  .action(async ({ parsedInput }) => {
+    const res = await FETCH.delete<IOrder>(API_ROUTES.ORDER.CANCLE_ORDER.replace(":id", parsedInput), {
+      cookies
+    })
+    if (res.success) {
+      revalidateTag(CACHE_KEY.ORDER.GET_ALL)
+      revalidateTag([CACHE_KEY.ORDER.GET_BY_ID, parsedInput].join(","))
+    }
+    return res
+  })

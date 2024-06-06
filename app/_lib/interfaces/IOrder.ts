@@ -17,7 +17,7 @@ export interface IOrder {
   paymentMethod?: string | IPaymentMethod
   shippingAddress: IAddress | string
   phoneNumber?: string
-  emailAdress?: string
+  emailAddress?: string
   note?: string
   coupon: string | ICoupon
   canceledAt?: Date | string

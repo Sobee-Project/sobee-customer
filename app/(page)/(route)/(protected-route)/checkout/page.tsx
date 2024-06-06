@@ -21,7 +21,7 @@ const page = async () => {
   }
 
   return (
-    <div className='mx-[5%] mt-8'>
+    <div className='mx-[5%] my-8'>
       <h2 className='mb-12 text-3xl font-semibold'>Checkout</h2>
       <CheckoutHandler addresses={addresses} user={user} />
     </div>

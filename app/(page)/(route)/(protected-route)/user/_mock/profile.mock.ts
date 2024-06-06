@@ -1,4 +1,5 @@
 import { APP_ROUTES } from "@/_constants"
+import { EOrderStatus } from "@/_lib/enums"
 import { Bell, Settings, Shirt, UserRoundCog } from "lucide-react"
 
 export const myAccountMock = [
@@ -35,89 +36,38 @@ export const mySettingsMock = [
   }
 ]
 
-export const myOrdersMock = [
-  {
-    title: "All",
-    href: APP_ROUTES.USER.ORDERS.INDEX
-  },
-  {
-    title: "Pending",
-    href: APP_ROUTES.USER.ORDERS.INDEX + "?status=pending"
-  },
-  {
-    title: "Processing",
-    href: APP_ROUTES.USER.ORDERS.INDEX + "?status=processing"
-  },
-  {
-    title: "Delivered",
-    href: APP_ROUTES.USER.ORDERS.INDEX + "?status=delivered"
-  },
-  {
-    title: "Cancelled",
-    href: APP_ROUTES.USER.ORDERS.INDEX + "?status=cancelled"
-  },
-  {
-    title: "Returned",
-    href: APP_ROUTES.USER.ORDERS.INDEX + "?status=returned"
-  },
-  {
-    title: "Refunded",
-    href: APP_ROUTES.USER.ORDERS.INDEX + "?status=refunded"
-  }
-]
-
 export const userRouteMock = [
   {
     section: "My account",
     items: myAccountMock,
-    href: APP_ROUTES.USER.ACCOUNT.PROFILE,
+    href: APP_ROUTES.USER.ACCOUNT.INDEX,
     icon: UserRoundCog
   },
   {
     section: "My orders",
-    href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "all"),
+    href: APP_ROUTES.USER.ORDERS.INDEX,
     icon: Shirt,
     items: [
       {
-        title: "All",
-        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "all")
+        title: "ALL",
+        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "ALL")
       },
-      {
-        title: "Pending",
-        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "pending")
-      },
-      {
-        title: "Processing",
-        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "processing")
-      },
-      {
-        title: "Delivered",
-        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "delivered")
-      },
-      {
-        title: "Cancelled",
-        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "cancelled")
-      },
-      {
-        title: "Returned",
-        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "returned")
-      },
-      {
-        title: "Refunded",
-        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "refunded")
-      }
+      ...Object.values(EOrderStatus).map((status) => ({
+        title: status,
+        href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", encodeURIComponent(status))
+      }))
     ]
   },
   {
     section: "Settings",
     items: mySettingsMock,
-    href: APP_ROUTES.USER.SETTINGS.NOTIFICATION,
+    href: APP_ROUTES.USER.SETTINGS.INDEX,
     icon: Settings
   },
 
   {
     section: "Notifications",
-    href: APP_ROUTES.USER.NOTIFICATIONS.ORDER,
+    href: APP_ROUTES.USER.NOTIFICATIONS.INDEX,
     icon: Bell,
     items: [
       {

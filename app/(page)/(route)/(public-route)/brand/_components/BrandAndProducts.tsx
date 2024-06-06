@@ -64,9 +64,6 @@ const BrandAndProducts = ({ name, _id, products }: Props) => {
             },
             1700: {
               slidesPerView: 5
-            },
-            2000: {
-              slidesPerView: 6
             }
           }}
         >

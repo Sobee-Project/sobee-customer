@@ -35,8 +35,8 @@ const CartList = ({ cart }: Props) => {
       const tax = product.tax as ITax
       const shippingFee = product.shippingFee as IShipping
       if (!tax || !shippingFee) return
-      sf += shippingFee.type === EShippingType.FIXED ? shippingFee.amount : shippingFee.amount * subTotal
-      tf += tax.rate * subTotal
+      sf += shippingFee.type === EShippingType.FIXED ? shippingFee.amount : (shippingFee.amount * subTotal) / 100
+      tf += (tax.rate * subTotal) / 100
     })
     return { sf, tf }
   }, [cart, subTotal])

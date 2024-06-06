@@ -34,6 +34,7 @@ export const APP_ROUTES = {
   TERMS_AND_CONDITIONS: "/terms-and-conditions",
   USER: {
     ACCOUNT: {
+      INDEX: "/user/account",
       PROFILE: "/user/account/profile",
       FAVORITE: "/user/account/favorite",
       BANK_ACCOUNT: "/user/account/bank-account",
@@ -58,5 +59,9 @@ export const APP_ROUTES = {
       STATUS: "/user/order/:status"
     }
   },
-  CONTACT: "/contact"
+  CONTACT: "/contact",
+  ORDERS: {
+    INDEX: "/order",
+    ID: "/order/:id"
+  }
 }

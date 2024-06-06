@@ -1,5 +1,6 @@
 "use client"
 import { createOrder } from "@/_actions"
+import { APP_ROUTES } from "@/_constants"
 import { EPaymentMethod } from "@/_lib/enums"
 import { CreateOrderFormSchema, createOrderFormSchema } from "@/_lib/form-schema"
 import { IAddress, IOrderItem, IPaymentMethod, IUser } from "@/_lib/interfaces"
@@ -7,6 +8,7 @@ import { useCartStore } from "@/_store"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Divider } from "@nextui-org/react"
 import { useAction } from "next-safe-action/hooks"
+import { useRouter } from "next/navigation"
 import React from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import toast from "react-hot-toast"
@@ -19,8 +21,10 @@ type Props = {
 }
 
 const CheckoutHandler = ({ addresses, user }: Props) => {
-  const { orderItems: cart } = useCartStore()
+  const { orderItems: cart, clearCart } = useCartStore()
   const defaultAddress = addresses.find((address) => address.isDefault)
+  const router = useRouter()
+
   const methods = useForm<CreateOrderFormSchema>({
     resolver: zodResolver(createOrderFormSchema),
     defaultValues: {
@@ -35,6 +39,8 @@ const CheckoutHandler = ({ addresses, user }: Props) => {
     onSuccess: ({ data }) => {
       if (data.success) {
         toast.success("Order created successfully")
+        router.push(APP_ROUTES.ORDERS.ID.replace(":id", data.data?._id!))
+        clearCart()
       } else {
         toast.error(data.message)
       }
@@ -44,7 +50,6 @@ const CheckoutHandler = ({ addresses, user }: Props) => {
   const isLoading = status === "executing"
 
   const onSubmit = (data: CreateOrderFormSchema) => {
-    console.log(data)
     execute(data)
   }
 

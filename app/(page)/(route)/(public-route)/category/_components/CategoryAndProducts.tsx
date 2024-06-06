@@ -65,14 +65,11 @@ const CategoryAndProducts = ({ name, slug, products }: Props) => {
             },
             1700: {
               slidesPerView: 5
-            },
-            2000: {
-              slidesPerView: 6
             }
           }}
         >
           {products.map((product) => (
-            <SwiperSlide key={product._id}>
+            <SwiperSlide key={product._id} className='h-auto'>
               <ProductCard product={product} key={product._id} />
             </SwiperSlide>
           ))}

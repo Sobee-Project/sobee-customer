@@ -6,6 +6,7 @@ import { ChevronDown } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
+import titleize from "titleize"
 import { userRouteMock } from "../_mock"
 
 const UserLeftSide = () => {
@@ -46,7 +47,7 @@ const UserLeftSide = () => {
                     isNavActive(childHref, pathname) ? "text-primary" : "text-foreground"
                   )}
                 >
-                  {title}
+                  {titleize(title)}
                 </Link>
               ))}
           </div>

@@ -15,8 +15,8 @@ type Props = {
 const BrandList = ({ brands }: Props) => {
   return (
     <div className=' space-y-10 pt-20'>
-      <div className='flex items-center justify-between'>
-        <h2 className='text-3xl font-semibold md:text-4xl'>
+      <div className='flex items-center justify-between gap-2'>
+        <h2 className='flex-1 text-3xl font-semibold md:text-4xl'>
           Choose your favorite brands
           <span className=''>{`. `}</span>
           <span className='text-neutral-500 dark:text-neutral-400'>What&apos;s trending now</span>
@@ -25,7 +25,7 @@ const BrandList = ({ brands }: Props) => {
           href={APP_ROUTES.BRANDS.INDEX}
           className='flex items-center text-primary hover:text-primary-400 hover:transition-colors'
         >
-          <p>View all</p>
+          <p className='flex-1'>View all</p>
           <ChevronRight size={20} />
         </Link>
       </div>
@@ -35,7 +35,6 @@ const BrandList = ({ brands }: Props) => {
         grid={{
           rows: 1
         }}
-        className='px-1 py-4'
         freeMode
         autoplay={{
           delay: 5000,
@@ -45,6 +44,9 @@ const BrandList = ({ brands }: Props) => {
         modules={[Pagination, FreeMode, Autoplay]}
         pagination={{
           clickable: true
+        }}
+        style={{
+          padding: "1rem 1.5rem"
         }}
         breakpoints={{
           300: {
