@@ -43,7 +43,8 @@ const CategoryList = ({ categories }: Props) => {
         loop
         modules={[Pagination, FreeMode, Autoplay]}
         pagination={{
-          clickable: true
+          clickable: true,
+          bulletClass: "swiper-pagination-bullet bg-primary dark:bg-white"
         }}
         style={{
           padding: "1rem 1.5rem"

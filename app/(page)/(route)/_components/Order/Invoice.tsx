@@ -29,7 +29,7 @@ const Invoice = forwardRef<HTMLDivElement, Props>(({ order }, ref) => {
             <div className='mb-20'>
               <div className='mb-20'>
                 <h1 className='mb-2 text-4xl font-bold'>Invoice No: {order.orderGeneratedId}</h1>
-                <cite>{format(order.createdAt?.toString()!, "EEEE MMMM, yyyy 'at' HH:mm")}</cite>
+                <cite>{format(order.createdAt?.toString()!, "EEEE do MMMM, yyyy 'at' hh:mm aaa")}</cite>
               </div>
               <div className='mt-4 flex gap-8'>
                 <div className='flex-1 space-y-2'>

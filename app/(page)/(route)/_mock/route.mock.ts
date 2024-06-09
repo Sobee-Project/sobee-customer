@@ -57,7 +57,7 @@ export const userRouteMock = [
   },
   {
     title: "My Orders",
-    href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "all"),
+    href: APP_ROUTES.USER.ORDERS.STATUS.replace(":status", "ALL"),
     icon: Shirt
   },
   {

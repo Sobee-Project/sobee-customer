@@ -1,13 +1,17 @@
 "use client"
-import { cancelOrder, getReview } from "@/_actions"
+import { cancelOrder, fetchRoomById, getReview, reOrder } from "@/_actions"
 import { ScreenLoader } from "@/_components"
+import { APP_ROUTES } from "@/_constants"
+import { useChatRoomSocket, useCreateChatRoomSocket } from "@/_hooks"
 import { EOrderStatus } from "@/_lib/enums"
 import { IOrder, IOrderItem, IProduct, IReview } from "@/_lib/interfaces"
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react"
-import { Download, Star, X } from "lucide-react"
+import { Download, ExternalLink, MessagesSquare, RotateCw, SquareArrowUpRight, Star, X } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
 import dynamic from "next/dynamic"
 import Image from "next/image"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { usePDF } from "react-to-pdf"
@@ -20,10 +24,13 @@ const ReviewForm = dynamic(() => import("@/(page)/(route)/_components/ReviewForm
 
 type Props = {
   order: IOrder
+  hideExternalLink?: boolean
 }
 
-const OrderItemList = ({ order }: Props) => {
+const OrderItemList = ({ order, hideExternalLink = false }: Props) => {
   const orderItems = order.orderItems as IOrderItem[]
+  const { data: chatRoom, createRoom, isLoading, isError, error, isSuccess } = useCreateChatRoomSocket()
+  const router = useRouter()
 
   const { toPDF, targetRef } = usePDF({
     page: {
@@ -52,11 +59,47 @@ const OrderItemList = ({ order }: Props) => {
     }
   })
 
+  const { execute: reOrderExecute, isExecuting: reOrderExecuting } = useAction(reOrder, {
+    onSuccess: ({ data }) => {
+      if (data.success) {
+        toast.success("Order re-created successfully")
+      } else {
+        toast.error(data.message)
+      }
+    }
+  })
+
   const handleCancelOrder = () => {
     execute(order._id!)
   }
 
-  const disabled = order.status === EOrderStatus.CANCELED || isExecuting || order.status !== EOrderStatus.PENDING
+  const handleReorder = () => {
+    reOrderExecute(order._id!)
+  }
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error)
+    }
+  }, [isError, error])
+
+  useEffect(() => {
+    if (isSuccess && chatRoom) {
+      location.href = APP_ROUTES.CHAT.ID.replace(":id", chatRoom._id!)
+    }
+  }, [isSuccess, router, chatRoom])
+
+  const onViewChatRoom = async () => {
+    const res = await fetchRoomById(order._id!)
+    if (!res.success) {
+      createRoom(order._id!)
+    } else {
+      router.push(APP_ROUTES.CHAT.ID.replace(":id", res.data!._id!))
+    }
+  }
+
+  const disabled =
+    order.status === EOrderStatus.CANCELED || isExecuting || order.status !== EOrderStatus.PENDING || reOrderExecuting
   const canReview = order.status === EOrderStatus.DELIVERED || order.status === EOrderStatus.COMPLETED
 
   return (
@@ -95,6 +138,16 @@ const OrderItemList = ({ order }: Props) => {
               })}
             </DropdownMenu>
           </Dropdown>
+        ) : order.status === EOrderStatus.CANCELED ? (
+          <Button
+            onPress={handleReorder}
+            color='secondary'
+            startContent={<RotateCw size={20} />}
+            radius='full'
+            variant='solid'
+          >
+            Re-order
+          </Button>
         ) : (
           <Button
             onPress={handleCancelOrder}
@@ -107,9 +160,31 @@ const OrderItemList = ({ order }: Props) => {
             Cancel Order
           </Button>
         )}
+        <Button
+          radius='full'
+          variant='solid'
+          color='primary'
+          startContent={<MessagesSquare size={20} />}
+          isLoading={isLoading}
+          onPress={onViewChatRoom}
+        >
+          Chat with Seller
+        </Button>
         <Button onPress={() => toPDF()} startContent={<Download size={20} />} radius='full' variant='light'>
           Download Invoice
         </Button>
+        {!hideExternalLink && (
+          <Button
+            radius='full'
+            variant='light'
+            isIconOnly
+            as={Link}
+            target='_blank'
+            href={APP_ROUTES.ORDERS.ID.replace(":id", order._id!)}
+          >
+            <ExternalLink size={20} />
+          </Button>
+        )}
       </div>
 
       {showReviewForm && (

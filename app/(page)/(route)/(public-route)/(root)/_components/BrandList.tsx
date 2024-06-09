@@ -43,7 +43,8 @@ const BrandList = ({ brands }: Props) => {
         loop
         modules={[Pagination, FreeMode, Autoplay]}
         pagination={{
-          clickable: true
+          clickable: true,
+          bulletClass: "swiper-pagination-bullet bg-primary dark:bg-white"
         }}
         style={{
           padding: "1rem 1.5rem"
@@ -70,7 +71,7 @@ const BrandList = ({ brands }: Props) => {
         }}
       >
         {brands.map((brand) => (
-          <SwiperSlide key={brand._id}>
+          <SwiperSlide key={brand._id} className='pb-10'>
             <BrandCard brand={brand} key={brand._id} />
           </SwiperSlide>
         ))}

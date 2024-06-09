@@ -7,7 +7,7 @@ import { cn } from "@/_lib/utils"
 import { useCartStore, useFavoriteStore } from "@/_store"
 import { isNavActive } from "@/_utils"
 import { Badge, Button, Spinner } from "@nextui-org/react"
-import { Menu, ShoppingCart } from "lucide-react"
+import { Menu, MessagesSquare, ShoppingCart } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
 import dynamic from "next/dynamic"
 import Link from "next/link"
@@ -89,6 +89,9 @@ const Topbar = ({ user }: Props) => {
           {user && (
             <>
               <CartMenu />
+              <Button as={Link} href={APP_ROUTES.CHAT.INDEX} isIconOnly variant='light'>
+                <MessagesSquare size={24} />
+              </Button>
               <Button isIconOnly variant='light' className='md:hidden' as={Link} href={APP_ROUTES.CARTS}>
                 <Badge content={cart?.length || 0} color='danger'>
                   <ShoppingCart size={24} />

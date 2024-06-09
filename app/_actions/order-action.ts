@@ -106,3 +106,19 @@ export const cancelOrder = safeAction
     }
     return res
   })
+
+export const reOrder = safeAction
+  .metadata({
+    actionName: "Re Order"
+  })
+  .schema(z.string())
+  .action(async ({ parsedInput }) => {
+    const res = await FETCH.put<any, IOrder>(API_ROUTES.ORDER.RE_ORDER.replace(":id", parsedInput), undefined, {
+      cookies
+    })
+    if (res.success) {
+      revalidateTag(CACHE_KEY.ORDER.GET_ALL)
+      revalidateTag([CACHE_KEY.ORDER.GET_BY_ID, parsedInput].join(","))
+    }
+    return res
+  })

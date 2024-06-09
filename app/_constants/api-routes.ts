@@ -103,12 +103,18 @@ export const API_ROUTES = {
     DELETE_ORDER_ITEM: "/order/item/:id",
     CANCEL_ORDER: "/order/:id/cancel",
     GET_ORDER_ITEMS: "/order/item",
-    CANCLE_ORDER: "/order/:id/status/cancel"
+    CANCLE_ORDER: "/order/:id/status/cancel",
+    RE_ORDER: "/order/:id/reorder"
   },
   PAYMENT_METHODS: {
     GET_PAYMENT_METHODS: "/payment-method"
   },
   REFUND_POLICY: {
     GET_ALL: "/refund-policy"
+  },
+
+  CHAT: {
+    CREATE_ROOM: "/chat-room",
+    GET_ROOM: "/chat-room/:id"
   }
 }

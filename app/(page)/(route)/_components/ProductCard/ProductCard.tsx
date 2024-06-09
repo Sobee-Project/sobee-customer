@@ -166,7 +166,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             </h3>
           </Link>
           <Link
-            href={APP_ROUTES.CATEGORIES.ID.replace(":id", category._id!)}
+            href={APP_ROUTES.CATEGORIES.ID.replace(":id", category.slug!)}
             className='w-fit text-slate-400 transition-colors hover:text-slate-200'
           >
             #{category.name}

@@ -63,5 +63,9 @@ export const APP_ROUTES = {
   ORDERS: {
     INDEX: "/order",
     ID: "/order/:id"
+  },
+  CHAT: {
+    INDEX: "/chat",
+    ID: "/chat/:id"
   }
 }

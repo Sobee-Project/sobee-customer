@@ -42,7 +42,8 @@ const CategoryAndProducts = ({ name, slug, products }: Props) => {
           loop
           modules={[Pagination, FreeMode, Autoplay]}
           pagination={{
-            clickable: true
+            clickable: true,
+            bulletClass: "swiper-pagination-bullet bg-primary dark:bg-white"
           }}
           breakpoints={{
             300: {
@@ -69,7 +70,7 @@ const CategoryAndProducts = ({ name, slug, products }: Props) => {
           }}
         >
           {products.map((product) => (
-            <SwiperSlide key={product._id} className='h-auto'>
+            <SwiperSlide key={product._id} className='h-auto pb-10'>
               <ProductCard product={product} key={product._id} />
             </SwiperSlide>
           ))}

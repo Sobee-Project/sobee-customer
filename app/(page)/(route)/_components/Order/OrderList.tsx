@@ -4,16 +4,29 @@ import { IOrder, IPaginate, IProduct } from "@/_lib/interfaces"
 import { cn } from "@/_lib/utils"
 import { colorizeOrderStatus } from "@/_utils"
 import { Accordion, AccordionItem, Button, Spinner } from "@nextui-org/react"
+import { format } from "date-fns"
 import { useParams } from "next/navigation"
 import React, { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import OrderCard from "./OrderCard"
 
-const OrderList = () => {
-  const params = useParams()
-  const status = decodeURIComponent(params.status?.toString() || "ALL")
-  const [orders, setOrders] = useState<IOrder[]>([])
-  const [paginationRes, setPaginationRes] = useState<IPaginate>({ nextPage: 1, hasNext: false })
+type Props = {
+  status?: string
+  initialOrders: IOrder[]
+  initialPagination: IPaginate
+}
+
+const OrderList = ({ initialOrders, initialPagination, status = "ALL" }: Props) => {
+  const [orders, setOrders] = useState<IOrder[]>(initialOrders)
+  const [paginationRes, setPaginationRes] = useState<IPaginate>(initialPagination)
+
+  useEffect(() => {
+    setOrders(initialOrders)
+    setPaginationRes(initialPagination)
+  }, [initialOrders, initialPagination])
+
+  console.log({ paginationRes })
+
   const [isFetching, setIsFetching] = useState(false)
 
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null)
@@ -34,22 +47,22 @@ const OrderList = () => {
     setIsFetching(false)
   }, [isFetching, paginationRes.nextPage, status])
 
-  useEffect(() => {
-    if (isFetching) return
-    ;(async function () {
-      setIsFetching(true)
-      const res = await fetchAllOrders({
-        status: status === "ALL" ? undefined : status
-      })
-      if (res.success) {
-        setOrders(res.data!)
-        setPaginationRes(res)
-      } else {
-        toast.error(res.message)
-      }
-      setIsFetching(false)
-    })()
-  }, [])
+  // useEffect(() => {
+  //   if (isFetching) return
+  //   ;(async function () {
+  //     setIsFetching(true)
+  //     const res = await fetchAllOrders({
+  //       status: status === "ALL" ? undefined : status
+  //     })
+  //     if (res.success) {
+  //       setOrders(res.data!)
+  //       setPaginationRes(res)
+  //     } else {
+  //       toast.error(res.message)
+  //     }
+  //     setIsFetching(false)
+  //   })()
+  // }, [])
 
   useEffect(() => {
     if (!selectedOrder) {
@@ -91,7 +104,9 @@ const OrderList = () => {
                 }}
                 title={
                   <div className={cn("rounded p-2", colorizeOrderStatus(order.status))}>
-                    <h1 className='text-lg font-semibold'>{order.orderGeneratedId}</h1>
+                    <h1 className='text-lg font-semibold'>
+                      {order.orderGeneratedId}- {format(order.createdAt!, "EEEE do MMMM, yyyy 'at' hh:mm aaa")}
+                    </h1>
                     <p className={""}>{order.status}</p>
                   </div>
                 }
