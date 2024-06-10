@@ -31,33 +31,16 @@ const page = async ({ params }: any) => {
 
   let reviews = [] as IReview[]
   let questions = [] as IQuestion[]
-  let relatedProducts = [] as IProduct[]
-  let recommendedProducts = [] as IProduct[]
   const reviewPromise = fetchProductReviews(params.id)
   const questionPromise = fetchProductQuestions(params.id)
-  const relatedProductsPromise = fetchRelatedProducts(params.id)
-  const recommendedProductsPromise = fetchRecommendProducts(params.id)
 
-  const [reviewsRes, questionRes, relatedProductRes, recommendedProductRes] = await Promise.all([
-    reviewPromise,
-    questionPromise,
-    relatedProductsPromise,
-    recommendedProductsPromise
-  ])
+  const [reviewsRes, questionRes] = await Promise.all([reviewPromise, questionPromise])
 
   if (reviewsRes.success) {
     reviews = reviewsRes.data!
   }
   if (questionRes.success) {
     questions = questionRes.data!
-  }
-
-  if (relatedProductRes.success) {
-    relatedProducts = relatedProductRes.data!
-  }
-
-  if (recommendedProductRes.success) {
-    recommendedProducts = recommendedProductRes.data!
   }
 
   const assets =
@@ -83,9 +66,9 @@ const page = async ({ params }: any) => {
       <Divider />
       <ProductQuestions questions={questions} />
       <Divider />
-      <RelatedProducts products={relatedProducts} />
+      <RelatedProducts productId={params.id} />
       <Divider />
-      <RecommendProducts products={recommendedProducts} />
+      <RecommendProducts productId={params.id} />
     </div>
   )
 }
