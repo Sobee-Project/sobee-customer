@@ -28,14 +28,6 @@ export const useSocket = (onConnect?: (socket: Socket) => void, dependencies: st
       setSocket(_socket)
     })
 
-    _socket.on("disconnect", () => {
-      setSocket(null)
-    })
-
-    // _socket.on("disconnect", () => {
-    //   _socket?.disconnect()
-    // })
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, socket, userId, ...dependencies])
 
