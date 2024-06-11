@@ -42,3 +42,10 @@ export const applyCoupon = safeAction
 
     return res
   })
+
+export const fetchByCode = async (code: string) => {
+  const res = await FETCH.get<ICoupon>(API_ROUTES.COUPONS.GET_BY_CODE.replace(":code", code), {
+    cookies
+  })
+  return res
+}

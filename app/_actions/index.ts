@@ -5,7 +5,7 @@ export { createCard, deleteCard, fetchAllCards, setDefaultCard } from "./card-ac
 export { fetchAllCategories, fetchCategoryAndProducts, fetchCategoryProducts } from "./category-action"
 export { createRoom, fetchRoomById } from "./chat-action"
 export { uploadFile, uploadUrl } from "./cloudinary-action"
-export { applyCoupon, fetchAllCoupons, fetchTodayCoupons } from "./coupon-action"
+export { applyCoupon, fetchAllCoupons, fetchByCode, fetchTodayCoupons } from "./coupon-action"
 export { fetchAllFaqs } from "./faq-action"
 export {
   cancelOrder,

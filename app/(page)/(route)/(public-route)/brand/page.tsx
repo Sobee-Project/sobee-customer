@@ -5,7 +5,7 @@ import BrandAndProductsList from "./_components/BrandAndProductsList"
 const page = async () => {
   const categoryAndProductsRes = await fetchBrandAndProducts()
   if (!categoryAndProductsRes.success) {
-    redirect("/" + categoryAndProductsRes.statusCode)
+    return <div className='text-center text-xl'>{categoryAndProductsRes.message}</div>
   }
 
   const data = categoryAndProductsRes.data!

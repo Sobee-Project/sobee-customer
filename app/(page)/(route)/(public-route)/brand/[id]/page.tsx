@@ -9,7 +9,7 @@ const page = async ({ params }: any) => {
   const id = params.id
   const categoryRes = await fetchBrandProducts(id)
   if (!categoryRes.success) {
-    redirect("/" + categoryRes.statusCode)
+    return <div className='text-center text-xl'>{categoryRes.message}</div>
   }
 
   const products = categoryRes.data || ([] as IProduct[])

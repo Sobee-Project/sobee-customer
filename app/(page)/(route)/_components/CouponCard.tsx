@@ -19,16 +19,19 @@ const CouponCard = ({ coupon, action = "save", onRemove = () => {} }: Props) => 
   return (
     <Card className='w-full' shadow='sm'>
       <CardBody className='justify-between gap-4 sm:flex-row'>
-        <Image
-          src={coupon.image}
-          alt={coupon.code}
-          width={100}
-          height={100}
-          className='size-24 rounded-full border object-contain object-center'
-        />
+        <Link href={APP_ROUTES.COUPONS.ID.replace(":id", coupon.code!)}>
+          <Image
+            src={coupon.image}
+            alt={coupon.code}
+            width={100}
+            height={100}
+            className='size-24 rounded-full border bg-white object-contain object-center'
+          />
+        </Link>
         <div className='flex-1'>
-          <p className='text-lg font-semibold'>{coupon.code}</p>
-
+          <Link href={APP_ROUTES.COUPONS.ID.replace(":id", coupon.code)}>
+            <p className='text-lg font-semibold'>{coupon.code}</p>
+          </Link>
           <div className='text-sm'>
             Discount{" "}
             <span className='font-medium'>
@@ -51,9 +54,7 @@ const CouponCard = ({ coupon, action = "save", onRemove = () => {} }: Props) => 
           />
         </div>
         {action === "save" ? (
-          <Button variant='solid' color='primary' radius='sm'>
-            Save
-          </Button>
+          <></>
         ) : (
           <Button variant='light' color='danger' radius='sm' isIconOnly onPress={() => onRemove(coupon)}>
             <Trash2Icon size={20} />

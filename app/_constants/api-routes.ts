@@ -84,7 +84,8 @@ export const API_ROUTES = {
   COUPONS: {
     GET_COUPONS: "/coupon",
     GET_TODAY_COUPONS: "/coupon/today",
-    APPLY_COUPON: "/coupon/validate"
+    APPLY_COUPON: "/coupon/validate",
+    GET_BY_CODE: "/coupon/code/:code"
   },
   QUESTION: {
     GET_PRODUCT_QUESTIONS: "/question/product/:id",
