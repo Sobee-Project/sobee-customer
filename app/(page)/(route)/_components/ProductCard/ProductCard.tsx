@@ -104,6 +104,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
   }, [product.displayPrice, product.maxPrice, product.minPrice, product.type, quantity])
 
   const onPressAddToCart = useCallback(async () => {
+    if (!userId) {
+      toast.error("Please login to add to cart")
+      return
+    }
     setIsLoading(true)
     if (product.isVariation) {
       await addOrderItem({
@@ -119,7 +123,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       })
     }
     setIsLoading(false)
-  }, [addOrderItem, product, selectedVariants, quantity])
+  }, [userId, product.isVariation, product._id, addOrderItem, quantity, selectedVariants.color, selectedVariants.size])
 
   return (
     <Card className='h-full min-w-60 transition-transform hover:scale-[1.008]' shadow='sm'>

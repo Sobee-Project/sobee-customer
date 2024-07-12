@@ -20,7 +20,6 @@ The Sobee Customer Site is a comprehensive e-commerce platform designed to provi
 1. **User Authentication and Authorization**:
 
    - Secure login and registration.
-   - Role-based access control.
 
 2. **Product Management**:
 
